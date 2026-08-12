@@ -1,0 +1,2643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Soluciones · Experiencia casera de aprendizaje · Química General 1</title>
+<meta name="description" content="Módulo interactivo para la experiencia casera de preparación de soluciones y diluciones. Química General 1, Tecnología en Regencia de Farmacia.">
+
+<!--
+===============================================================================
+  MODULO INTERACTIVO - EXPERIENCIA CASERA DE APRENDIZAJE
+  Practica: Soluciones (preparacion y diluciones)
+  Asignatura: Quimica General 1 - Tecnologia en Regencia de Farmacia
+  Fundacion Universitaria Salesiana - Facultad de Ciencias Exactas y Naturales
+  Basado en la guia del profesor Sergio Andres Patino M.
+
+  ---------------------------------------------------------------------------
+  LOGOS
+  ---------------------------------------------------------------------------
+  El modulo espera dos archivos de imagen en la MISMA carpeta que este HTML:
+
+      logosalesiana.png   logo institucional (encabezado, pie y bitacora)
+      ese.png             marca del diseno del entorno
+
+  Si subes el modulo a un LMS, sube tambien los dos PNG al mismo directorio.
+  Si alguno falta, el modulo muestra un recuadro punteado en su lugar: nunca
+  aparece una imagen rota.
+
+  Para obtener un archivo unico y totalmente autocontenido, reemplaza el valor
+  del atributo src de cada imagen por su codigo base64:
+
+      src="data:image/png;base64,iVBORw0KGgo..."
+
+  ---------------------------------------------------------------------------
+  COMO CAMBIAR LA PALETA
+  ---------------------------------------------------------------------------
+  Todos los colores viven en el bloque :root de la hoja de estilos, mas abajo.
+  Los valores actuales aproximan la identidad visual de SALESIANA; si cuentas
+  con los hexadecimales oficiales del manual de marca, reemplazalos ahi y el
+  modulo entero se actualiza.
+===============================================================================
+-->
+
+
+<style>
+/* ==========================================================================
+   1. TOKENS DE DISEÑO
+   ========================================================================== */
+:root{
+  /* --- Paleta institucional (editar aquí) --- */
+  --rojo:            #C1272D;   /* rojo SALESIANA */
+  --rojo-oscuro:     #8E1B20;
+  --rojo-tenue:      #FBEEEE;
+  --tinta:           #1B2430;   /* texto principal */
+  --tinta-media:     #4A5563;
+  --tinta-suave:     #78838F;
+  --papel:           #F6F4F0;   /* fondo general */
+  --superficie:      #FFFFFF;
+  --superficie-alt:  #FAF8F5;
+  --borde:           #E3DED5;
+  --borde-fuerte:    #CFC8BC;
+  --agua:            #1F6F8B;   /* acento de registro y datos */
+  --agua-tenue:      #EAF3F6;
+  --logro:           #2E7D5B;   /* confirmaciones */
+  --logro-tenue:     #EAF4EF;
+  --ambar:           #A96A00;   /* avisos de atención */
+  --ambar-tenue:     #FDF3E3;
+
+  /* --- Tipografía --- */
+  --fuente-titulo: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --fuente-texto:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente-dato:   ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  /* --- Ritmo y forma --- */
+  --e1: 4px;  --e2: 8px;  --e3: 12px; --e4: 16px;
+  --e5: 24px; --e6: 32px; --e7: 48px; --e8: 64px;
+  --radio: 10px;
+  --radio-s: 6px;
+  --sombra: 0 1px 2px rgba(27,36,48,.05), 0 6px 20px rgba(27,36,48,.06);
+  --ancho: 830px;
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--papel);
+  color:var(--tinta);
+  font-family:var(--fuente-texto);
+  font-size:16.5px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--fuente-titulo);font-weight:600;line-height:1.22;margin:0}
+h1{font-size:clamp(1.75rem,4.5vw,2.4rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.45rem,3.6vw,1.9rem);letter-spacing:-.01em}
+h3{font-size:1.16rem}
+h4{font-size:1rem;font-family:var(--fuente-texto);font-weight:650}
+p{margin:0 0 var(--e4)}
+p:last-child{margin-bottom:0}
+a{color:var(--rojo-oscuro)}
+ul,ol{margin:0 0 var(--e4);padding-left:1.35em}
+li{margin-bottom:var(--e2)}
+li:last-child{margin-bottom:0}
+strong{font-weight:650}
+:focus-visible{outline:3px solid var(--agua);outline-offset:2px;border-radius:4px}
+
+.oculto{display:none !important}
+.solo-lectores{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+.saltar{
+  position:absolute;left:-9999px;top:0;background:var(--tinta);color:#fff;
+  padding:var(--e3) var(--e4);z-index:100;border-radius:0 0 var(--radio-s) 0;
+}
+.saltar:focus{left:0}
+
+/* ==========================================================================
+   3. ENCABEZADO Y MARCAS
+   ========================================================================== */
+.cabecera{
+  position:sticky;top:0;z-index:40;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:saturate(1.4) blur(8px);
+  border-bottom:1px solid var(--borde);
+}
+.cabecera-fila{
+  max-width:var(--ancho);margin:0 auto;
+  padding:var(--e3) var(--e4);
+  display:flex;align-items:center;gap:var(--e4);
+}
+.marca{display:flex;align-items:center;gap:var(--e3);min-width:0}
+.logo-hueco{
+  display:flex;align-items:center;justify-content:center;
+  border:1px dashed var(--borde-fuerte);border-radius:var(--radio-s);
+  color:var(--tinta-suave);font-size:.62rem;line-height:1.15;text-align:center;
+  font-family:var(--fuente-dato);letter-spacing:.02em;
+  padding:var(--e1) var(--e2);background:var(--superficie-alt);
+}
+.logo-hueco.institucional{width:118px;height:38px}
+.logo-hueco.desarrollo{width:104px;height:34px}
+.logo-img{display:block;max-height:40px;width:auto}
+.cabecera-texto{min-width:0}
+.cabecera-titulo{
+  font-family:var(--fuente-titulo);font-size:.98rem;font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.cabecera-sub{
+  font-size:.72rem;color:var(--tinta-suave);text-transform:uppercase;
+  letter-spacing:.08em;font-family:var(--fuente-dato);
+}
+.estado-guardado{
+  margin-left:auto;flex-shrink:0;font-size:.72rem;color:var(--tinta-suave);
+  display:flex;align-items:center;gap:6px;font-family:var(--fuente-dato);
+}
+.punto-guardado{
+  width:7px;height:7px;border-radius:50%;background:var(--logro);
+  transition:background .3s, transform .3s;
+}
+.punto-guardado.activo{background:var(--ambar);transform:scale(1.4)}
+
+/* --- Indicador de progreso: la serie de diluciones --- */
+.serie{
+  max-width:var(--ancho);margin:0 auto;
+  padding:0 var(--e4) var(--e3);
+  display:flex;align-items:flex-end;gap:5px;
+}
+.serie-vaso{
+  flex:1 1 0;min-width:0;height:22px;padding:0;border:0;background:none;
+  cursor:pointer;position:relative;
+}
+.serie-vaso::before{
+  content:"";display:block;width:100%;height:16px;
+  clip-path:polygon(14% 0,86% 0,72% 100%,28% 100%);
+  background:var(--rojo);opacity:.13;
+  transition:opacity .35s ease;
+}
+.serie-vaso[data-estado="hecho"]::before{opacity:.88}
+.serie-vaso[data-estado="parcial"]::before{opacity:.42}
+.serie-vaso[aria-current="step"]::after{
+  content:"";position:absolute;left:20%;right:20%;bottom:0;
+  height:3px;border-radius:2px;background:var(--tinta);
+}
+.serie-vaso:hover::before{opacity:.6}
+.serie-etiqueta{
+  max-width:var(--ancho);margin:0 auto;padding:0 var(--e4) var(--e3);
+  display:flex;justify-content:space-between;gap:var(--e3);
+  font-size:.72rem;color:var(--tinta-suave);font-family:var(--fuente-dato);
+}
+
+/* ==========================================================================
+   4. ESTRUCTURA DE SECCIONES
+   ========================================================================== */
+main{max-width:var(--ancho);margin:0 auto;padding:var(--e6) var(--e4) 120px}
+.seccion{display:none;animation:aparece .28s ease}
+.seccion.visible{display:block}
+@keyframes aparece{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .seccion{animation:none}
+  *{transition-duration:.01ms !important}
+}
+.eyebrow{
+  font-family:var(--fuente-dato);font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--rojo);margin-bottom:var(--e2);
+  display:flex;align-items:center;gap:var(--e2);
+}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--borde)}
+.seccion-intro{
+  color:var(--tinta-media);font-size:1.02rem;margin:var(--e3) 0 var(--e6);
+  max-width:60ch;
+}
+
+/* --- Tarjetas --- */
+.tarjeta{
+  background:var(--superficie);border:1px solid var(--borde);
+  border-radius:var(--radio);padding:var(--e5);margin-bottom:var(--e4);
+  box-shadow:var(--sombra);
+}
+.tarjeta-titulo{
+  display:flex;align-items:baseline;gap:var(--e3);margin-bottom:var(--e3);
+}
+.tarjeta-num{
+  font-family:var(--fuente-dato);font-size:.78rem;color:var(--rojo);
+  font-weight:600;flex-shrink:0;
+}
+.tarjeta.acento-agua{border-left:3px solid var(--agua)}
+.tarjeta.acento-rojo{border-left:3px solid var(--rojo)}
+.tarjeta.plana{box-shadow:none;background:var(--superficie-alt)}
+
+.nota{
+  background:var(--agua-tenue);border-left:3px solid var(--agua);
+  padding:var(--e3) var(--e4);border-radius:0 var(--radio-s) var(--radio-s) 0;
+  font-size:.94rem;color:var(--tinta-media);margin:var(--e4) 0;
+}
+.nota.atencion{background:var(--ambar-tenue);border-left-color:var(--ambar)}
+.nota.cuidado{background:var(--rojo-tenue);border-left-color:var(--rojo)}
+.nota.logro{background:var(--logro-tenue);border-left-color:var(--logro)}
+.nota strong{color:var(--tinta)}
+.nota p{margin-bottom:var(--e2)}
+
+.rejilla{display:grid;gap:var(--e3)}
+@media(min-width:640px){ .rejilla.dos{grid-template-columns:1fr 1fr} }
+
+/* --- Jerarquía de competencias --- */
+.cascada{list-style:none;padding:0;margin:0}
+.cascada > li{
+  position:relative;padding:var(--e3) 0 var(--e3) var(--e6);
+  border-left:2px solid var(--borde);margin:0;
+}
+.cascada > li:last-child{border-left-color:transparent}
+.cascada > li::before{
+  content:"";position:absolute;left:-6px;top:22px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--superficie);border:2px solid var(--rojo);
+}
+.cascada-nivel{
+  font-family:var(--fuente-dato);font-size:.68rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tinta-suave);display:block;margin-bottom:2px;
+}
+
+/* ==========================================================================
+   5. CAMPOS INTERACTIVOS
+   ========================================================================== */
+.campo{margin-bottom:var(--e5)}
+.campo:last-child{margin-bottom:0}
+.campo-pregunta{
+  display:block;font-weight:600;margin-bottom:var(--e2);color:var(--tinta);
+}
+.campo-ayuda{
+  display:block;font-size:.88rem;color:var(--tinta-suave);margin-bottom:var(--e2);
+}
+input[type="text"],input[type="number"],input[type="date"],input[type="email"],textarea,select{
+  width:100%;font-family:inherit;font-size:1rem;color:var(--tinta);
+  background:var(--superficie);border:1px solid var(--borde-fuerte);
+  border-radius:var(--radio-s);padding:10px 12px;
+  transition:border-color .15s, box-shadow .15s;
+}
+textarea{resize:vertical;min-height:92px;line-height:1.6}
+textarea.corta{min-height:64px}
+input:focus,textarea:focus,select:focus{
+  border-color:var(--agua);box-shadow:0 0 0 3px rgba(31,111,139,.14);outline:none;
+}
+input.pendiente,textarea.pendiente{border-color:var(--ambar);background:var(--ambar-tenue)}
+
+.casilla{
+  display:flex;gap:var(--e3);align-items:flex-start;
+  padding:var(--e3);border:1px solid var(--borde);border-radius:var(--radio-s);
+  background:var(--superficie);margin-bottom:var(--e2);cursor:pointer;
+  transition:background .15s,border-color .15s;
+  min-height:46px;
+}
+.casilla:hover{background:var(--superficie-alt)}
+.casilla input[type="checkbox"]{
+  width:20px;height:20px;margin:2px 0 0;flex-shrink:0;accent-color:var(--rojo);cursor:pointer;
+}
+.casilla:has(input:checked){background:var(--logro-tenue);border-color:#B9DCCB}
+.casilla-texto{font-size:.97rem}
+
+/* --- Tablas --- */
+.tabla-envoltura{overflow-x:auto;margin:var(--e4) 0;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.94rem;min-width:520px}
+caption{
+  text-align:left;font-size:.85rem;color:var(--tinta-suave);
+  padding-bottom:var(--e2);font-family:var(--fuente-dato);
+}
+th,td{
+  border:1px solid var(--borde);padding:9px 11px;text-align:left;vertical-align:middle;
+}
+thead th{
+  background:var(--superficie-alt);font-weight:650;font-size:.84rem;
+  color:var(--tinta-media);
+}
+tbody th{background:var(--superficie-alt);font-weight:600}
+td input[type="text"],td input[type="number"]{
+  border:1px solid transparent;background:transparent;padding:6px 7px;font-size:.94rem;
+}
+td input:hover{border-color:var(--borde)}
+td input:focus{background:var(--superficie);border-color:var(--agua)}
+.rotulo{
+  font-family:var(--fuente-dato);font-weight:600;font-size:.9rem;
+  color:var(--rojo-oscuro);letter-spacing:.04em;
+}
+.dato-fijo{font-family:var(--fuente-dato);color:var(--tinta-media);font-size:.92rem}
+.tabla-materiales input[type="checkbox"]{width:19px;height:19px;accent-color:var(--rojo);cursor:pointer}
+
+/* --- Evidencia fotográfica --- */
+.evidencia{
+  border:1px solid var(--borde);border-radius:var(--radio);
+  background:var(--superficie);padding:var(--e4);margin-bottom:var(--e4);
+}
+.evidencia-cab{display:flex;align-items:baseline;gap:var(--e2);margin-bottom:var(--e2)}
+.evidencia-clave{
+  font-family:var(--fuente-dato);font-size:.75rem;color:#fff;background:var(--rojo);
+  padding:2px 7px;border-radius:4px;letter-spacing:.05em;flex-shrink:0;
+}
+.evidencia-zona{
+  border:2px dashed var(--borde-fuerte);border-radius:var(--radio-s);
+  padding:var(--e5) var(--e4);text-align:center;background:var(--superficie-alt);
+}
+.evidencia-zona p{font-size:.9rem;color:var(--tinta-suave);margin:0 0 var(--e3)}
+.evidencia-vista{display:none}
+.evidencia.con-foto .evidencia-zona{display:none}
+.evidencia.con-foto .evidencia-vista{display:block}
+.evidencia-vista img{
+  width:100%;max-height:340px;object-fit:contain;background:#EDEAE4;
+  border-radius:var(--radio-s);display:block;
+}
+.evidencia-acciones{display:flex;gap:var(--e2);flex-wrap:wrap;margin:var(--e3) 0}
+
+/* --- Lienzo de dibujo --- */
+.lienzo-caja{border:1px solid var(--borde-fuerte);border-radius:var(--radio-s);overflow:hidden;background:#fff}
+#lienzoPrediccion{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+
+/* ==========================================================================
+   6. BOTONES Y NAVEGACIÓN
+   ========================================================================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:inherit;font-size:.95rem;font-weight:600;line-height:1.2;
+  padding:11px 18px;border-radius:var(--radio-s);border:1px solid transparent;
+  cursor:pointer;transition:background .15s,border-color .15s,color .15s;
+  min-height:44px;text-decoration:none;
+}
+.btn-primario{background:var(--rojo);color:#fff}
+.btn-primario:hover{background:var(--rojo-oscuro)}
+.btn-secundario{background:var(--superficie);color:var(--tinta);border-color:var(--borde-fuerte)}
+.btn-secundario:hover{background:var(--superficie-alt);border-color:var(--tinta-suave)}
+.btn-suave{background:transparent;color:var(--tinta-media);border-color:var(--borde);font-weight:500;font-size:.88rem;padding:8px 13px;min-height:38px}
+.btn-suave:hover{background:var(--superficie-alt);color:var(--tinta)}
+.btn-peligro{background:transparent;color:var(--rojo-oscuro);border-color:#E8C4C4}
+.btn-peligro:hover{background:var(--rojo-tenue)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.grupo-btn{display:flex;gap:var(--e3);flex-wrap:wrap;margin-top:var(--e4)}
+
+.pie-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:35;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(8px);
+  border-top:1px solid var(--borde);
+  padding:var(--e3) var(--e4);
+  padding-bottom:calc(var(--e3) + env(safe-area-inset-bottom));
+}
+.pie-nav-fila{
+  max-width:var(--ancho);margin:0 auto;display:flex;align-items:center;gap:var(--e3);
+}
+.pie-nav-centro{
+  flex:1;text-align:center;font-size:.76rem;color:var(--tinta-suave);
+  font-family:var(--fuente-dato);min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.menu-secciones{
+  position:fixed;inset:0;z-index:60;background:rgba(27,36,48,.45);
+  display:none;padding:var(--e4);
+}
+.menu-secciones.abierto{display:flex;align-items:flex-end;justify-content:center}
+.menu-panel{
+  background:var(--superficie);border-radius:var(--radio) var(--radio) 0 0;
+  width:100%;max-width:var(--ancho);max-height:80vh;overflow-y:auto;padding:var(--e5);
+}
+@media(min-width:700px){
+  .menu-secciones.abierto{align-items:center}
+  .menu-panel{border-radius:var(--radio)}
+}
+.menu-lista{list-style:none;padding:0;margin:0}
+.menu-lista li{margin:0}
+.menu-lista button{
+  width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--borde);
+  padding:13px var(--e2);font-family:inherit;font-size:.98rem;color:var(--tinta);
+  cursor:pointer;display:flex;align-items:center;gap:var(--e3);
+}
+.menu-lista button:hover{background:var(--superficie-alt)}
+.menu-lista button[aria-current="step"]{font-weight:650;color:var(--rojo-oscuro)}
+.menu-indice{font-family:var(--fuente-dato);font-size:.78rem;color:var(--tinta-suave);width:1.6em;flex-shrink:0}
+.menu-marca{margin-left:auto;font-size:.8rem;color:var(--logro);font-family:var(--fuente-dato)}
+
+/* ==========================================================================
+   7. PIE Y AVISOS
+   ========================================================================== */
+.pie-modulo{
+  border-top:1px solid var(--borde);margin-top:var(--e7);padding-top:var(--e5);
+  font-size:.84rem;color:var(--tinta-suave);
+}
+.pie-marcas{display:flex;align-items:center;gap:var(--e5);flex-wrap:wrap;margin-bottom:var(--e4)}
+.lista-pendientes{list-style:none;padding:0;margin:var(--e3) 0 0}
+.lista-pendientes li{margin-bottom:var(--e2)}
+.lista-pendientes button{
+  background:none;border:0;padding:0;color:var(--rojo-oscuro);cursor:pointer;
+  font-family:inherit;font-size:.94rem;text-align:left;text-decoration:underline;
+}
+</style>
+<style>
+/* ==========================================================================
+   8. BITÁCORA: VISTA PREVIA EN PANTALLA
+   ========================================================================== */
+#documentoBitacora{display:none}
+#documentoBitacora.visible{display:block}
+.doc{
+  background:#fff;color:#14181F;
+  font-family:var(--fuente-texto);font-size:11.2pt;line-height:1.55;
+  padding:var(--e6);border:1px solid var(--borde);border-radius:var(--radio);
+}
+.doc-portada{text-align:left;border-bottom:2px solid var(--rojo);padding-bottom:var(--e5);margin-bottom:var(--e5)}
+.doc-marcas{display:flex;justify-content:space-between;align-items:center;gap:var(--e4);margin-bottom:var(--e5)}
+.doc-institucion{font-family:var(--fuente-dato);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave)}
+.doc h1{font-family:var(--fuente-titulo);font-size:1.75rem;margin-bottom:6px}
+.doc-subtitulo{color:var(--tinta-media);font-size:1rem}
+.doc-datos{
+  display:grid;grid-template-columns:auto 1fr;gap:4px var(--e4);
+  margin-top:var(--e5);font-size:.95rem;
+}
+.doc-datos dt{font-weight:650;color:var(--tinta-media)}
+.doc-datos dd{margin:0}
+.doc h2{
+  font-family:var(--fuente-titulo);font-size:1.22rem;margin:var(--e6) 0 var(--e3);
+  padding-bottom:5px;border-bottom:1px solid var(--borde);color:var(--rojo-oscuro);
+}
+.doc h3{font-size:1rem;font-family:var(--fuente-texto);font-weight:650;margin:var(--e4) 0 var(--e2)}
+.doc-item{margin-bottom:var(--e4)}
+.doc-pregunta{font-weight:600;color:var(--tinta-media);margin-bottom:3px;font-size:.95rem}
+.doc-respuesta{white-space:pre-wrap;padding-left:var(--e3);border-left:2px solid var(--borde)}
+.doc-respuesta.vacia{color:#98A1AB;font-style:italic;border-left-style:dotted}
+.doc table{font-size:.88rem;min-width:0;margin:var(--e3) 0}
+.doc th,.doc td{border:1px solid #D5D0C7;padding:6px 8px}
+.doc-figura{margin:var(--e4) 0;break-inside:avoid}
+.doc-figura img{width:100%;max-width:460px;border:1px solid var(--borde);border-radius:4px;display:block}
+.doc-figura figcaption{font-size:.87rem;color:var(--tinta-media);margin-top:5px}
+.doc-figura .doc-pie-clave{font-family:var(--fuente-dato);font-weight:600;color:var(--rojo-oscuro)}
+.doc-marcado{font-family:var(--fuente-dato)}
+.doc-pie{
+  margin-top:var(--e7);padding-top:var(--e3);border-top:1px solid var(--borde);
+  font-size:.78rem;color:var(--tinta-suave);display:flex;justify-content:space-between;
+  gap:var(--e4);flex-wrap:wrap;align-items:center;
+}
+
+/* ==========================================================================
+   9. IMPRESIÓN / GUARDAR COMO PDF
+   ========================================================================== */
+@media print{
+  @page{size:A4;margin:18mm 16mm}
+  html,body{background:#fff !important}
+  body{font-size:10.5pt}
+  .cabecera,.serie,.serie-etiqueta,.pie-nav,.menu-secciones,
+  #app,.no-imprimir,.grupo-btn,.pie-modulo{display:none !important}
+  #documentoBitacora{display:block !important}
+  .doc{border:0;padding:0;border-radius:0;box-shadow:none}
+  .doc h2{break-after:avoid;page-break-after:avoid}
+  .doc-item,.doc-figura,.doc table{break-inside:avoid;page-break-inside:avoid}
+  .doc-portada{break-after:page;page-break-after:always}
+  .doc-figura img{max-width:100%;max-height:110mm;object-fit:contain}
+  a{color:inherit;text-decoration:none}
+  .logo-hueco{border-color:#CCC;color:#999}
+}
+</style>
+</head>
+<body>
+
+<a class="saltar" href="#contenido">Ir al contenido</a>
+
+<!-- ======================================================================
+     ENCABEZADO
+     ====================================================================== -->
+<header class="cabecera no-imprimir">
+  <div class="cabecera-fila">
+    <div class="marca">
+      <!-- LOGO INSTITUCIONAL -->
+      <img class="logo-img" id="logoInstitucional" src="logosalesiana.png" alt="Fundación Universitaria Salesiana">
+      <span class="logo-hueco institucional" id="huecoInstitucional">LOGO<br>INSTITUCIONAL</span>
+      <!-- /LOGO INSTITUCIONAL -->
+      <div class="cabecera-texto">
+        <div class="cabecera-titulo">Soluciones y diluciones</div>
+        <div class="cabecera-sub">Química General 1 · Experiencia casera</div>
+      </div>
+    </div>
+    <div class="estado-guardado" aria-live="polite">
+      <span class="punto-guardado" id="puntoGuardado" aria-hidden="true"></span>
+      <span id="textoGuardado">Guardado</span>
+    </div>
+  </div>
+
+  <nav class="serie" id="serieProgreso" aria-label="Progreso por secciones"></nav>
+  <div class="serie-etiqueta">
+    <span id="etiquetaSeccion">Portada</span>
+    <span id="etiquetaAvance">0 % diligenciado</span>
+  </div>
+</header>
+
+<main id="contenido">
+<div id="app">
+
+<!-- ======================================================================
+     1 · PORTADA
+     ====================================================================== -->
+<section class="seccion visible" id="s-portada" data-titulo="Portada" data-corto="Portada">
+  <p class="eyebrow">Experiencia casera de aprendizaje</p>
+  <h1>Soluciones: preparar, diluir y observar</h1>
+  <p class="seccion-intro">
+    Vas a convertir un rincón de tu casa en un pequeño laboratorio. Antes de empezar,
+    déjanos saber quién eres: estos datos encabezarán la bitácora que entregarás al final.
+  </p>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Tus datos</h3></div>
+    <div class="rejilla dos">
+      <div class="campo">
+        <label class="campo-pregunta" for="c-nombre">Nombre completo</label>
+        <input type="text" id="c-nombre" data-campo="nombre" data-esencial autocomplete="name" placeholder="Como aparece en la plataforma">
+      </div>
+      <div class="campo">
+        <label class="campo-pregunta" for="c-documento">Documento o código</label>
+        <input type="text" id="c-documento" data-campo="documento" data-esencial>
+      </div>
+      <div class="campo">
+        <label class="campo-pregunta" for="c-correo">Correo institucional</label>
+        <input type="email" id="c-correo" data-campo="correo" autocomplete="email" placeholder="nombre@salesiana.edu.co">
+      </div>
+      <div class="campo">
+        <label class="campo-pregunta" for="c-fecha">Fecha en que realizas la práctica</label>
+        <input type="date" id="c-fecha" data-campo="fecha" data-esencial>
+      </div>
+    </div>
+  </div>
+
+  <div class="tarjeta plana">
+    <div class="tarjeta-titulo"><h3>Ficha de la práctica</h3></div>
+    <div class="tabla-envoltura">
+      <table>
+        <caption>Datos tomados del microcurrículo y del programa de la asignatura</caption>
+        <tbody>
+          <tr><th scope="row">Asignatura</th><td>Química General 1 · 3 créditos</td></tr>
+          <tr><th scope="row">Programa</th><td>Tecnología en Regencia de Farmacia · modalidad virtual</td></tr>
+          <tr><th scope="row">Unidad</th><td>2 · Estados de agregación y mezclas</td></tr>
+          <tr><th scope="row">Práctica</th><td>Soluciones (experimento casero)</td></tr>
+          <tr><th scope="row">Profesor</th><td>Sergio Andrés Patiño M. · sergio.patino@salesiana.edu.co</td></tr>
+          <tr><th scope="row">Producto que entregas</th><td>Bitácora digital con registro, cálculos y análisis</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nota">
+    <p><strong>Todo lo que escribas se guarda en este dispositivo.</strong> El módulo no envía nada
+    a internet: tus respuestas y tus fotografías quedan únicamente en el navegador que estás usando.</p>
+    <p>Por eso, dos cosas importantes: continúa la práctica en este mismo navegador, y ten presente
+    que si borras los datos de navegación perderás tus avances. Cuando termines, genera el PDF y
+    guárdalo aparte.</p>
+  </div>
+
+  <div class="grupo-btn no-imprimir">
+    <button class="btn btn-primario" type="button" data-ir="s-presentacion">Comenzar la experiencia</button>
+  </div>
+</section>
+
+<!-- ======================================================================
+     2 · PRESENTACIÓN
+     ====================================================================== -->
+<section class="seccion" id="s-presentacion" data-titulo="Presentación" data-corto="Presentación">
+  <p class="eyebrow">Por qué vas a hacer esto</p>
+  <h2>Preparar una solución es un acto profesional</h2>
+
+  <div class="tarjeta">
+    <p>Usas soluciones todos los días sin detenerte a pensar en qué las compone, cuánto hay de cada
+    cosa, o si eso que llamas por su nombre comercial es en realidad una mezcla. La química está ahí,
+    aunque no la nombres.</p>
+
+    <p>En el ejercicio del Tecnólogo en Regencia de Farmacia, preparar una solución no es solo mezclar
+    un soluto y un solvente. Es seguir un procedimiento, medir con cuidado, registrar lo que hiciste y
+    verificar que el resultado sea el que debía ser. Ese conjunto de acciones es lo que sostiene la
+    calidad y la seguridad de un producto que va a llegar a otra persona.</p>
+
+    <p>Aquí vas a preparar soluciones coloreadas con materiales de uso diario y a modificar su
+    concentración de dos maneras distintas. No necesitas experiencia previa. Lo que sí necesitas es
+    observar con atención, anotar lo que ocurre y construir tus propias explicaciones a partir de lo
+    que veas.</p>
+  </div>
+
+  <div class="nota">
+    <p><strong>Cuánto te va a tomar.</strong> Alrededor de dos horas entre la preparación del espacio,
+    el trabajo experimental y el registro. Puedes cerrar el módulo y retomarlo después: todo queda
+    guardado donde lo dejaste.</p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     3 · COMPETENCIAS Y RESULTADOS DE APRENDIZAJE
+     ====================================================================== -->
+<section class="seccion" id="s-competencias" data-titulo="Competencias y resultados de aprendizaje" data-corto="Competencias">
+  <p class="eyebrow">De dónde viene esta práctica</p>
+  <h2>Qué se está construyendo en ti</h2>
+  <p class="seccion-intro">
+    Esta experiencia no está suelta. Se desprende de las competencias declaradas para la asignatura
+    y aterriza en objetivos concretos y en evidencias que tú vas a producir.
+  </p>
+
+  <div class="tarjeta">
+    <ul class="cascada">
+      <li>
+        <span class="cascada-nivel">Competencia general</span>
+        <strong>Pensamiento matemático</strong>
+      </li>
+      <li>
+        <span class="cascada-nivel">Competencias específicas</span>
+        <strong>Pensamiento científico-químico</strong><br>
+        <strong>Fundamentos químicos, moleculares y celulares</strong>
+      </li>
+      <li>
+        <span class="cascada-nivel">Resultado de aprendizaje esperado</span>
+        Analiza los principios que rigen el comportamiento de los gases y las unidades de concentración
+        en disoluciones, estableciendo la relación entre la teoría científica y la preparación técnica
+        de mezclas básicas.
+      </li>
+      <li>
+        <span class="cascada-nivel">Objetivos de esta práctica</span>
+        Los encuentras en la sección siguiente.
+      </li>
+      <li>
+        <span class="cascada-nivel">Evidencias que vas a producir</span>
+        Predicciones iniciales · compromiso de seguridad diligenciado · cinco fotografías con su
+        descripción · observaciones de las tres etapas · tabla de concentraciones de las nueve
+        soluciones · análisis y conclusiones propias.
+      </li>
+    </ul>
+  </div>
+
+  <div class="nota">
+    <p><strong>Las tres dimensiones están en juego a la vez.</strong>
+    El <em>saber</em> aparece cuando calculas y explicas; el <em>saber hacer</em>, cuando mides,
+    rotulas y registras; el <em>saber ser</em>, cuando reportas lo que realmente observaste, aunque
+    no coincida con lo que esperabas.</p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     4 · OBJETIVOS
+     ====================================================================== -->
+<section class="seccion" id="s-objetivos" data-titulo="Objetivos de la práctica" data-corto="Objetivos">
+  <p class="eyebrow">Hacia dónde vas</p>
+  <h2>Al terminar esta experiencia serás capaz de…</h2>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O1</span><h3>Preparar</h3></div>
+    <p>Preparar soluciones a partir de un soluto sólido y por dilución, con ingredientes y materiales
+    domésticos, siguiendo un procedimiento operativo estándar.</p>
+  </div>
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O2</span><h3>Diluir</h3></div>
+    <p>Realizar diluciones de manera directa y seriada, y comparar cualitativamente los resultados
+    obtenidos.</p>
+  </div>
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O3</span><h3>Calcular</h3></div>
+    <p>Calcular las unidades de concentración de las soluciones que preparaste.</p>
+  </div>
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O4</span><h3>Interpretar</h3></div>
+    <p>Interpretar los resultados y relacionarlos con situaciones propias del ejercicio profesional del
+    Tecnólogo en Regencia de Farmacia.</p>
+  </div>
+
+  <div class="nota">
+    <p>Al final vas a escribir <strong>una conclusión por cada uno de estos cuatro objetivos</strong>.
+    Tenlos presentes mientras trabajas.</p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     5 · ACTIVACIÓN DE CONOCIMIENTOS PREVIOS
+     ====================================================================== -->
+<section class="seccion" id="s-prelab" data-titulo="Antes de empezar: lo que ya sabes" data-corto="Predicciones">
+  <p class="eyebrow">Bitácora prelaboratorio</p>
+  <h2>Lo que ya sabes, antes de tocar nada</h2>
+  <p class="seccion-intro">
+    Responde con lo que piensas hoy, a partir de tu experiencia cotidiana. No consultes libros ni
+    internet: la gracia está en que quede registrado tu punto de partida.
+  </p>
+
+  <div class="nota">
+    <p><strong>Aquí no hay respuestas correctas ni incorrectas.</strong> No se califica el acierto de
+    lo que escribas, sino que hayas desarrollado la actividad: es lo que permite construir la
+    competencia. Al terminar la práctica volverás a leer estas respuestas y decidirás tú mismo si
+    cambiarías alguna.</p>
+  </div>
+
+  <div class="tarjeta">
+    <div class="campo">
+      <label class="campo-pregunta" for="c-p1">
+        1 · Imagina que tienes una bebida coloreada y le agregas agua hasta duplicar su volumen inicial.
+        ¿Qué le ocurrirá al color de la bebida?
+      </label>
+      <textarea id="c-p1" data-campo="p1" data-esencial placeholder="Escribe lo que piensas…"></textarea>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <div class="campo">
+      <label class="campo-pregunta" for="c-p2">
+        2 · A partir de esa misma bebida preparas tres vasos:
+      </label>
+      <ul>
+        <li><strong>Vaso A:</strong> 2 cucharadas de la bebida y 6 de agua.</li>
+        <li><strong>Vaso B:</strong> 4 cucharadas de la bebida y 4 de agua.</li>
+        <li><strong>Vaso C:</strong> 8 cucharadas de la bebida y nada de agua.</li>
+      </ul>
+      <span class="campo-ayuda">¿Cómo esperas que se vean? Haz un dibujo sencillo y explícalo con tus
+      propias palabras.</span>
+    </div>
+
+    <div class="campo">
+      <span class="campo-pregunta" id="lbl-dibujo">Tu dibujo</span>
+      <div class="lienzo-caja" id="cajaLienzo" data-foto="D1">
+        <canvas id="lienzoPrediccion" width="720" height="320" role="img"
+                aria-labelledby="lbl-dibujo"
+                aria-describedby="ayudaLienzo"></canvas>
+      </div>
+      <span class="campo-ayuda" id="ayudaLienzo">Dibuja con el dedo, el ratón o un lápiz digital.
+      Si prefieres dibujar en papel, toma una foto y súbela con el botón de la derecha.</span>
+      <div class="evidencia-acciones no-imprimir">
+        <button type="button" class="btn btn-suave" id="btnLimpiarLienzo">Borrar el dibujo</button>
+        <label class="btn btn-suave" for="fileDibujo">Subir foto de mi dibujo</label>
+        <input type="file" id="fileDibujo" accept="image/jpeg,image/png,image/webp" class="solo-lectores">
+      </div>
+      <div class="evidencia con-foto oculto" id="cajaDibujoFoto">
+        <div class="evidencia-vista">
+          <img id="vistaDibujoFoto" alt="Foto de tu dibujo de predicción">
+        </div>
+        <div class="evidencia-acciones no-imprimir">
+          <button type="button" class="btn btn-suave" id="btnQuitarDibujoFoto">Quitar la foto y volver a dibujar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label class="campo-pregunta" for="c-p2b">Explica tu dibujo con tus propias palabras</label>
+      <textarea id="c-p2b" data-campo="p2" data-esencial placeholder="¿Qué diferencia esperas entre los tres vasos y por qué?"></textarea>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <div class="campo">
+      <label class="campo-pregunta" for="c-p3">
+        3 · ¿Es posible medir siempre el mismo volumen usando una cuchara?
+      </label>
+      <span class="campo-ayuda">Explícalo con detalle, con tus propias palabras.</span>
+      <textarea id="c-p3" data-campo="p3" data-esencial></textarea>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <div class="campo">
+      <label class="campo-pregunta" for="c-p4">
+        4 · Describe dos situaciones —de la vida cotidiana o de tu futuro ejercicio profesional— en
+        las que debas preparar soluciones.
+      </label>
+      <textarea id="c-p4" data-campo="p4" data-esencial></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     6 · SEGURIDAD (modelo RAMP)
+     ====================================================================== -->
+<section class="seccion" id="s-seguridad" data-titulo="Seguridad" data-corto="Seguridad">
+  <p class="eyebrow">Reconocer · Evaluar · Minimizar · Prepararse</p>
+  <h2>Trabajar seguro también en la cocina de tu casa</h2>
+  <p class="seccion-intro">
+    Un buen profesional trabaja de manera segura incluso cuando usa materiales cotidianos. Aquí
+    emplearás agua, colorante alimentario y utensilios domésticos. Los riesgos son bajos, y aun así
+    el orden y el método hacen parte de tu formación.
+  </p>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">R</span><h3>Reconocer los peligros</h3></div>
+    <p>Durante esta práctica pueden presentarse:</p>
+    <ul>
+      <li>Derrames de agua o de colorante.</li>
+      <li>Manchas sobre la ropa o la superficie de trabajo.</li>
+      <li>Desorden en el área de trabajo.</li>
+    </ul>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">A</span><h3>Evaluar los riesgos</h3></div>
+    <p>Los materiales que vas a utilizar no representan un riesgo importante para la salud cuando se
+    emplean correctamente. Lo que sí puede afectarte es el desorden: un espacio mal organizado
+    ocasiona errores durante la preparación de las soluciones.</p>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">M</span><h3>Minimizar los riesgos</h3></div>
+    <ul>
+      <li>Organiza todos los materiales antes de comenzar.</li>
+      <li>Rotula cada vaso antes de preparar la solución.</li>
+      <li>Trabaja sobre una mesa limpia y estable.</li>
+      <li>Mantén las soluciones alejadas de alimentos, niños y mascotas.</li>
+      <li><strong>No pruebes ninguna de las preparaciones.</strong></li>
+      <li>Limpia inmediatamente cualquier derrame.</li>
+    </ul>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">P</span><h3>Prepararse para una emergencia</h3></div>
+    <ul>
+      <li>Si ocurre un derrame, límpialo con papel absorbente y agua.</li>
+      <li>Si el colorante entra en contacto con tus ojos, enjuágalos con abundante agua durante varios
+      minutos.</li>
+      <li>Si ocurre cualquier situación que consideres insegura, suspende la práctica y reorganiza tu
+      espacio antes de continuar.</li>
+    </ul>
+  </div>
+
+  <div class="nota">
+    <p><strong>Al terminar.</strong> Las soluciones que vas a preparar son agua con refresco en polvo:
+    puedes desecharlas por el desagüe con abundante agua. Los vasos desechables y el papel absorbente
+    van al residuo correspondiente según la separación que uses en casa.</p>
+  </div>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Compromiso de seguridad</h3></div>
+    <p class="campo-ayuda">Marca cada casilla antes de comenzar. Esto queda registrado en tu bitácora.</p>
+
+    <label class="casilla"><input type="checkbox" data-campo="seg1" data-esencial>
+      <span class="casilla-texto">Mi espacio de trabajo está limpio y organizado.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="seg2" data-esencial>
+      <span class="casilla-texto">Tengo todos los materiales necesarios.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="seg3" data-esencial>
+      <span class="casilla-texto">Las soluciones permanecerán alejadas de alimentos.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="seg4" data-esencial>
+      <span class="casilla-texto">Al finalizar limpiaré el área de trabajo.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="seg5" data-esencial>
+      <span class="casilla-texto">Leí las medidas de seguridad y suspenderé la práctica si algo me
+      parece inseguro.</span></label>
+
+    <div class="nota logro" id="avisoSeguridad" hidden>
+      <p>Compromiso completo. Puedes continuar con tranquilidad.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     7 · MATERIALES
+     ====================================================================== -->
+<section class="seccion" id="s-materiales" data-titulo="Materiales" data-corto="Materiales">
+  <p class="eyebrow">Antes de empezar</p>
+  <h2>Reúne todo sobre la mesa</h2>
+  <p class="seccion-intro">
+    Marca cada material a medida que lo tengas a la mano. Trabajar sin interrupciones para ir a buscar
+    algo es parte del método.
+  </p>
+
+  <div class="tarjeta">
+    <div class="tabla-envoltura">
+      <table class="tabla-materiales">
+        <caption>Verificación de materiales · 10 elementos</caption>
+        <thead>
+          <tr><th scope="col">Listo</th><th scope="col">Material</th><th scope="col">Cantidad</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><input type="checkbox" data-campo="mat1" aria-label="Vasos desechables transparentes"></td><td>Vasos desechables transparentes de 10 onzas</td><td class="dato-fijo">10</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat2" aria-label="Sobre de bebida en polvo"></td><td>Sobre de bebida en polvo (tipo Frutiño)</td><td class="dato-fijo">1</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat3" aria-label="Agua potable"></td><td>Agua potable</td><td class="dato-fijo">1 L</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat4" aria-label="Jeringa"></td><td>Jeringa de 10 mL (sin aguja)</td><td class="dato-fijo">1</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat5" aria-label="Cuchara dulcera"></td><td>Cuchara dulcera</td><td class="dato-fijo">1</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat6" aria-label="Marcador permanente"></td><td>Marcador permanente</td><td class="dato-fijo">1</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat7" aria-label="Cinta de enmascarar"></td><td>Cinta de enmascarar</td><td class="dato-fijo">1 rollo</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat8" aria-label="Papel absorbente"></td><td>Papel absorbente o servilletas</td><td class="dato-fijo">10 unidades</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat9" aria-label="Teléfono celular con cámara"></td><td>Teléfono celular con cámara</td><td class="dato-fijo">1</td></tr>
+          <tr><td><input type="checkbox" data-campo="mat10" aria-label="Gotero"></td><td>Gotero</td><td class="dato-fijo">1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="nota">
+    <p><strong>Un consejo sobre la luz.</strong> Escoge un lugar bien iluminado y, si puedes, ten a la
+    mano una hoja blanca para colocar detrás de los vasos cuando tomes las fotografías. La comparación
+    de color depende mucho de la iluminación.</p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     8 · FUNDAMENTO TEÓRICO
+     ====================================================================== -->
+<section class="seccion" id="s-fundamento" data-titulo="Fundamento teórico" data-corto="Fundamento">
+  <p class="eyebrow">Lo mínimo para empezar</p>
+  <h2>Cinco ideas que vas a poner a prueba</h2>
+  <p class="seccion-intro">
+    No necesitas memorizar estas definiciones. Lo importante es que las compruebes durante la práctica,
+    con lo que ocurra frente a tus ojos.
+  </p>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">1</span><h3>Solución</h3></div>
+    <p>Mezcla homogénea formada por dos componentes.</p>
+  </div>
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">2</span><h3>Soluto</h3></div>
+    <p>Sustancia que se disuelve.</p>
+  </div>
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">3</span><h3>Solvente</h3></div>
+    <p>Sustancia presente en mayor cantidad, que permite disolver al soluto.</p>
+  </div>
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">4</span><h3>Concentración</h3></div>
+    <p>Relación existente entre la cantidad de soluto presente y una determinada cantidad de solución.</p>
+  </div>
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">5</span><h3>Dilución</h3></div>
+    <p>Proceso en el cual se agrega solvente a una solución para obtener una nueva solución con menor
+    concentración. En esta práctica vas a realizar dos tipos:</p>
+    <div class="rejilla dos">
+      <div class="tarjeta plana" style="margin:0">
+        <h4>Dilución directa</h4>
+        <p>Todas las soluciones se preparan a partir de la solución inicial.</p>
+      </div>
+      <div class="tarjeta plana" style="margin:0">
+        <h4>Dilución sucesiva o seriada</h4>
+        <p>Cada solución se prepara usando la solución obtenida en el paso anterior.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="nota atencion">
+    <p><strong>Una advertencia sobre esta sección.</strong> Aquí termina lo que te podemos adelantar.
+    Lo que ocurra con el color de cada vaso es exactamente lo que vienes a descubrir, así que no lo
+    vas a encontrar escrito en ninguna parte del módulo. Anótalo tú.</p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     9 · PROCEDIMIENTO EXPERIMENTAL
+     ====================================================================== -->
+<section class="seccion" id="s-procedimiento" data-titulo="Procedimiento experimental" data-corto="Procedimiento">
+  <p class="eyebrow">Manos a la obra · tres etapas</p>
+  <h2>Prepara, diluye, observa</h2>
+  <p class="seccion-intro">
+    Avanza etapa por etapa. Cada una te dice qué hacer, qué mirar con atención y qué dejar registrado.
+    Lo que escribas aquí pasa directo a tu bitácora: no tendrás que copiarlo otra vez.
+  </p>
+
+  <!-- ---------- ETAPA 1 ---------- -->
+  <div class="tarjeta acento-agua">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">ETAPA 1</span><h3>Material y solución madre</h3></div>
+
+    <ol>
+      <li>Organiza todos los materiales sobre una mesa limpia y bien iluminada.</li>
+      <li>Rotula los vasos <em>antes</em> de utilizarlos con los códigos
+        <span class="rotulo">B · M · DD1 · DD2 · DD3 · DD4 · DS1 · DS2 · DS3 · DS4</span>.
+        Esto te ayudará a mantener el orden durante toda la práctica.</li>
+      <li>Con el marcador permanente traza una línea recta horizontal al final de la última ranura de
+        cada vaso. Así todas tus mezclas tendrán el mismo volumen total, cercano a 10 onzas.</li>
+      <li>Llena el vaso <span class="rotulo">B</span> con agua hasta la línea que marcaste. Acércate al
+        nivel con el vaso y completa los últimos milímetros con el gotero.</li>
+      <li>En el vaso <span class="rotulo">M</span> adiciona dos cucharadas dulceras del refresco en
+        polvo. Tómalas <strong>al ras</strong> y procura que las dos adiciones tengan la misma
+        cantidad. Agrega agua hasta la mitad del vaso y agita con la cuchara hasta disolver
+        completamente el sólido. Luego agrega más agua sin pasar la línea, y completa el nivel con el
+        gotero.</li>
+    </ol>
+
+    <div class="nota atencion">
+      <p><strong>Mira con atención mientras agitas.</strong> Fíjate en cómo entra el polvo al agua,
+      cuánto tardas en dejar de ver sólido y en qué aspecto queda el vaso B frente al vaso M.</p>
+    </div>
+
+    <div class="evidencia" data-foto="F1">
+      <div class="evidencia-cab"><span class="evidencia-clave">F1</span><h4>Tu espacio de trabajo organizado</h4></div>
+      <p class="campo-ayuda">Tómala después de rotular los diez vasos y antes de agregar nada.</p>
+      <div class="evidencia-zona">
+        <p>Aún no has cargado esta fotografía.</p>
+        <label class="btn btn-secundario" for="file-F1">Tomar o elegir foto</label>
+        <input type="file" id="file-F1" accept="image/jpeg,image/png,image/webp" class="solo-lectores" data-foto-input="F1">
+      </div>
+      <div class="evidencia-vista">
+        <img data-foto-img="F1" alt="Evidencia F1: espacio de trabajo organizado">
+        <div class="evidencia-acciones no-imprimir">
+          <label class="btn btn-suave" for="file-F1">Reemplazar</label>
+          <button type="button" class="btn btn-suave" data-foto-borrar="F1">Eliminar</button>
+        </div>
+      </div>
+      <div class="campo" style="margin-top:16px">
+        <label class="campo-pregunta" for="c-descF1">Describe esta fotografía</label>
+        <textarea class="corta" id="c-descF1" data-campo="descF1" placeholder="¿Qué se ve? ¿Cómo dispusiste los vasos?"></textarea>
+      </div>
+    </div>
+
+    <div class="evidencia" data-foto="F2">
+      <div class="evidencia-cab"><span class="evidencia-clave">F2</span><h4>Los vasos B y M al terminar la etapa</h4></div>
+      <p class="campo-ayuda">Ubícalos uno al lado del otro, contra un fondo claro.</p>
+      <div class="evidencia-zona">
+        <p>Aún no has cargado esta fotografía.</p>
+        <label class="btn btn-secundario" for="file-F2">Tomar o elegir foto</label>
+        <input type="file" id="file-F2" accept="image/jpeg,image/png,image/webp" class="solo-lectores" data-foto-input="F2">
+      </div>
+      <div class="evidencia-vista">
+        <img data-foto-img="F2" alt="Evidencia F2: vasos B y M">
+        <div class="evidencia-acciones no-imprimir">
+          <label class="btn btn-suave" for="file-F2">Reemplazar</label>
+          <button type="button" class="btn btn-suave" data-foto-borrar="F2">Eliminar</button>
+        </div>
+      </div>
+      <div class="campo" style="margin-top:16px">
+        <label class="campo-pregunta" for="c-descF2">Describe esta fotografía</label>
+        <textarea class="corta" id="c-descF2" data-campo="descF2"></textarea>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label class="campo-pregunta" for="c-obs1">Registra tus observaciones de la etapa 1</label>
+      <span class="campo-ayuda">Un texto corto. Describe lo que viste, sin explicarlo todavía.</span>
+      <textarea id="c-obs1" data-campo="obs1" data-esencial></textarea>
+    </div>
+  </div>
+
+  <!-- ---------- ETAPA 2 ---------- -->
+  <div class="tarjeta acento-agua">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">ETAPA 2</span><h3>Diluciones directas</h3></div>
+
+    <ol>
+      <li>Con la jeringa sin aguja toma de la solución <span class="rotulo">M</span> los volúmenes
+        indicados en la tabla. Transfiérelos a los vasos correspondientes y completa el nivel con agua,
+        igual que antes.</li>
+      <li>Organiza las mezclas preparadas y coloca al final el vaso <span class="rotulo">B</span>,
+        que llenaste con agua. Toma la fotografía de la serie completa.</li>
+    </ol>
+
+    <div class="nota cuidado">
+      <p><strong>Todas parten del mismo vaso M.</strong> Enjuaga la jeringa con agua entre una toma y
+      otra, y verifica el volumen a la altura de tus ojos antes de transferir.</p>
+    </div>
+
+    <div class="tabla-envoltura">
+      <table>
+        <caption>Registro de la serie de dilución directa</caption>
+        <thead>
+          <tr>
+            <th scope="col">Rótulo</th>
+            <th scope="col">Solución de partida</th>
+            <th scope="col">Volumen tomado (mL)</th>
+            <th scope="col">Lo que observas en ese vaso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row" class="rotulo">DD1</th><td class="dato-fijo">M</td><td class="dato-fijo">10</td>
+            <td><input type="text" data-campo="obsDD1" aria-label="Observación del vaso DD1"></td></tr>
+          <tr><th scope="row" class="rotulo">DD2</th><td class="dato-fijo">M</td><td class="dato-fijo">5</td>
+            <td><input type="text" data-campo="obsDD2" aria-label="Observación del vaso DD2"></td></tr>
+          <tr><th scope="row" class="rotulo">DD3</th><td class="dato-fijo">M</td><td class="dato-fijo">2</td>
+            <td><input type="text" data-campo="obsDD3" aria-label="Observación del vaso DD3"></td></tr>
+          <tr><th scope="row" class="rotulo">DD4</th><td class="dato-fijo">M</td><td class="dato-fijo">1</td>
+            <td><input type="text" data-campo="obsDD4" aria-label="Observación del vaso DD4"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="evidencia" data-foto="F3">
+      <div class="evidencia-cab"><span class="evidencia-clave">F3</span><h4>La serie de dilución directa</h4></div>
+      <p class="campo-ayuda">En orden, con el vaso B al final. Fondo claro y luz pareja.</p>
+      <div class="evidencia-zona">
+        <p>Aún no has cargado esta fotografía.</p>
+        <label class="btn btn-secundario" for="file-F3">Tomar o elegir foto</label>
+        <input type="file" id="file-F3" accept="image/jpeg,image/png,image/webp" class="solo-lectores" data-foto-input="F3">
+      </div>
+      <div class="evidencia-vista">
+        <img data-foto-img="F3" alt="Evidencia F3: serie de dilución directa">
+        <div class="evidencia-acciones no-imprimir">
+          <label class="btn btn-suave" for="file-F3">Reemplazar</label>
+          <button type="button" class="btn btn-suave" data-foto-borrar="F3">Eliminar</button>
+        </div>
+      </div>
+      <div class="campo" style="margin-top:16px">
+        <label class="campo-pregunta" for="c-descF3">Describe esta fotografía</label>
+        <textarea class="corta" id="c-descF3" data-campo="descF3"></textarea>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label class="campo-pregunta" for="c-obs2">Registra tus observaciones de la etapa 2</label>
+      <textarea id="c-obs2" data-campo="obs2" data-esencial></textarea>
+    </div>
+  </div>
+
+  <!-- ---------- ETAPA 3 ---------- -->
+  <div class="tarjeta acento-agua">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">ETAPA 3</span><h3>Diluciones seriadas</h3></div>
+
+    <ol>
+      <li>Con la jeringa sin aguja toma los volúmenes indicados en la tabla. Fíjate bien en la columna
+        <em>solución de partida</em>: aquí cada vaso se prepara a partir del anterior. Completa el nivel
+        con agua igual que antes.</li>
+      <li>Organiza las mezclas y coloca al final el vaso <span class="rotulo">B</span>. Toma la
+        fotografía de la serie.</li>
+    </ol>
+
+    <div class="nota cuidado">
+      <p><strong>El orden importa.</strong> No puedes preparar DS3 antes que DS2. Agita cada vaso antes
+      de tomar el volumen para el siguiente, y enjuaga la jeringa entre transferencias.</p>
+    </div>
+
+    <div class="tabla-envoltura">
+      <table>
+        <caption>Registro de la serie de dilución seriada</caption>
+        <thead>
+          <tr>
+            <th scope="col">Rótulo</th>
+            <th scope="col">Solución de partida</th>
+            <th scope="col">Volumen tomado (mL)</th>
+            <th scope="col">Lo que observas en ese vaso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row" class="rotulo">DS1</th><td class="dato-fijo">M</td><td class="dato-fijo">10</td>
+            <td><input type="text" data-campo="obsDS1" aria-label="Observación del vaso DS1"></td></tr>
+          <tr><th scope="row" class="rotulo">DS2</th><td class="dato-fijo">DS1</td><td class="dato-fijo">10</td>
+            <td><input type="text" data-campo="obsDS2" aria-label="Observación del vaso DS2"></td></tr>
+          <tr><th scope="row" class="rotulo">DS3</th><td class="dato-fijo">DS2</td><td class="dato-fijo">10</td>
+            <td><input type="text" data-campo="obsDS3" aria-label="Observación del vaso DS3"></td></tr>
+          <tr><th scope="row" class="rotulo">DS4</th><td class="dato-fijo">DS3</td><td class="dato-fijo">10</td>
+            <td><input type="text" data-campo="obsDS4" aria-label="Observación del vaso DS4"></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="evidencia" data-foto="F4">
+      <div class="evidencia-cab"><span class="evidencia-clave">F4</span><h4>La serie de dilución seriada</h4></div>
+      <p class="campo-ayuda">En orden, con el vaso B al final.</p>
+      <div class="evidencia-zona">
+        <p>Aún no has cargado esta fotografía.</p>
+        <label class="btn btn-secundario" for="file-F4">Tomar o elegir foto</label>
+        <input type="file" id="file-F4" accept="image/jpeg,image/png,image/webp" class="solo-lectores" data-foto-input="F4">
+      </div>
+      <div class="evidencia-vista">
+        <img data-foto-img="F4" alt="Evidencia F4: serie de dilución seriada">
+        <div class="evidencia-acciones no-imprimir">
+          <label class="btn btn-suave" for="file-F4">Reemplazar</label>
+          <button type="button" class="btn btn-suave" data-foto-borrar="F4">Eliminar</button>
+        </div>
+      </div>
+      <div class="campo" style="margin-top:16px">
+        <label class="campo-pregunta" for="c-descF4">Describe esta fotografía</label>
+        <textarea class="corta" id="c-descF4" data-campo="descF4"></textarea>
+      </div>
+    </div>
+
+    <div class="campo">
+      <label class="campo-pregunta" for="c-obs3">Registra tus observaciones de la etapa 3</label>
+      <textarea id="c-obs3" data-campo="obs3" data-esencial></textarea>
+    </div>
+
+    <div class="evidencia" data-foto="F5">
+      <div class="evidencia-cab"><span class="evidencia-clave">F5</span><h4>Tu espacio de trabajo al culminar</h4></div>
+      <p class="campo-ayuda">Última fotografía, cuando ya hayas terminado y ordenado.</p>
+      <div class="evidencia-zona">
+        <p>Aún no has cargado esta fotografía.</p>
+        <label class="btn btn-secundario" for="file-F5">Tomar o elegir foto</label>
+        <input type="file" id="file-F5" accept="image/jpeg,image/png,image/webp" class="solo-lectores" data-foto-input="F5">
+      </div>
+      <div class="evidencia-vista">
+        <img data-foto-img="F5" alt="Evidencia F5: espacio de trabajo al culminar">
+        <div class="evidencia-acciones no-imprimir">
+          <label class="btn btn-suave" for="file-F5">Reemplazar</label>
+          <button type="button" class="btn btn-suave" data-foto-borrar="F5">Eliminar</button>
+        </div>
+      </div>
+      <div class="campo" style="margin-top:16px">
+        <label class="campo-pregunta" for="c-descF5">Describe esta fotografía</label>
+        <textarea class="corta" id="c-descF5" data-campo="descF5"></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     10 · REGISTRO DE RESULTADOS
+     ====================================================================== -->
+<section class="seccion" id="s-registro" data-titulo="Registro de resultados" data-corto="Registro">
+  <p class="eyebrow">Resultados experimentales</p>
+  <h2>Lo que quedó en tu bitácora</h2>
+  <p class="seccion-intro">
+    Aquí no tienes que volver a copiar nada: el módulo ya guardó lo que escribiste durante el
+    procedimiento. Revisa que esté completo y añade lo que falte.
+  </p>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Estado de tus evidencias</h3></div>
+    <div id="resumenRegistro"></div>
+  </div>
+
+  <div class="tarjeta acento-agua">
+    <div class="tarjeta-titulo"><h3>Ordena las nueve soluciones</h3></div>
+    <p>De la que viste con el color más intenso a la que viste más clara. Si dos te parecen iguales,
+    colócalas seguidas y anótalo abajo: eso también es un resultado.</p>
+    <div class="tabla-envoltura">
+      <table>
+        <caption>Ordenamiento observado · posición 1 = color más intenso</caption>
+        <thead><tr><th scope="col">Posición</th><th scope="col">Solución</th></tr></thead>
+        <tbody id="cuerpoOrden"></tbody>
+      </table>
+    </div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-ordenNota">¿Hubo vasos que no lograste distinguir entre sí?</label>
+      <span class="campo-ayuda">Dilo con franqueza y señala cuáles. Un límite de tu observación es un dato,
+      no un error.</span>
+      <textarea class="corta" id="c-ordenNota" data-campo="ordenNota"></textarea>
+    </div>
+  </div>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Una mirada a tus dos tablas</h3></div>
+    <p>Vuelve a leer la tabla de la etapa 2 y la de la etapa 3, fijándote en la solución de partida y
+    en el volumen tomado de cada vaso.</p>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-coincidencia">
+        ¿Encuentras alguna preparación que se repita en las dos series? Si es así, anótala y compara
+        los dos vasos.
+      </label>
+      <textarea class="corta" id="c-coincidencia" data-campo="coincidencia"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     11 · ANÁLISIS DE RESULTADOS
+     ====================================================================== -->
+<section class="seccion" id="s-analisis" data-titulo="Análisis de resultados" data-corto="Análisis">
+  <p class="eyebrow">Ahora sí, interpreta</p>
+  <h2>De lo que viste a lo que significa</h2>
+  <p class="seccion-intro">
+    Las preguntas avanzan de lo que observaste hacia lo que puedes argumentar. Tómate el tiempo:
+    esta es la parte donde se nota tu razonamiento.
+  </p>
+
+  <!-- 1 -->
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">1</span><h3>Vuelve a tus predicciones</h3></div>
+    <p class="campo-ayuda">Esto fue lo que escribiste antes de comenzar:</p>
+    <div id="ecoPredicciones"></div>
+    <div class="campo" style="margin-top:16px">
+      <label class="campo-pregunta" for="c-a1">Compara tus observaciones con lo que habías escrito</label>
+      <textarea id="c-a1" data-campo="a1" data-esencial></textarea>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">2</span><h3>Los extremos de la serie</h3></div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-a2">
+        ¿Cuál de las soluciones presentó el color más intenso? ¿Cuál presentó el color más claro?
+      </label>
+      <textarea class="corta" id="c-a2" data-campo="a2" data-esencial></textarea>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">3</span><h3>Lo esperado y lo ocurrido</h3></div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-a3">
+        ¿El orden de las soluciones coincidió con lo que imaginabas antes de comenzar? Explica.
+      </label>
+      <textarea id="c-a3" data-campo="a3" data-esencial></textarea>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">4</span><h3>Calcula la concentración de las nueve soluciones</h3></div>
+
+    <p>Si la cantidad de colorante que hay en una cucharada dulcera de refresco en polvo es de
+    <strong>10 mg</strong>, calcula para cada solución que preparaste:</p>
+    <ol type="a">
+      <li><strong>Porcentaje masa/masa</strong> — asume que la densidad de la solución es 1,00 g/mL.</li>
+      <li><strong>Porcentaje masa/volumen.</strong></li>
+      <li><strong>Partes por millón.</strong></li>
+    </ol>
+
+    <div class="tarjeta plana" style="margin:16px 0">
+      <h4>Tus datos de partida</h4>
+      <div class="rejilla dos" style="margin-top:12px">
+        <div class="campo" style="margin-bottom:0">
+          <label class="campo-pregunta" for="c-volVaso">Volumen total de cada vaso (mL)</label>
+          <span class="campo-ayuda">10 onzas equivalen a unos 296 mL. Si mediste el tuyo con la
+          jeringa, escribe ese valor.</span>
+          <input type="number" id="c-volVaso" data-campo="volVaso" value="296" min="1" step="1">
+        </div>
+        <div class="campo" style="margin-bottom:0">
+          <label class="campo-pregunta" for="c-masaM">Masa de colorante en el vaso M (mg)</label>
+          <span class="campo-ayuda">Recuerda cuántas cucharadas agregaste.</span>
+          <input type="number" id="c-masaM" data-campo="masaM" step="0.1" placeholder="Calcúlalo tú">
+        </div>
+      </div>
+    </div>
+
+    <div class="tabla-envoltura">
+      <table>
+        <caption>Concentración de las nueve soluciones preparadas</caption>
+        <thead>
+          <tr>
+            <th scope="col">Solución</th>
+            <th scope="col">% m/m</th>
+            <th scope="col">% m/v</th>
+            <th scope="col">ppm</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoCalculos"></tbody>
+      </table>
+    </div>
+
+    <div class="nota">
+      <p>El módulo no calcula por ti a propósito: el procedimiento es justamente lo que se evalúa.
+      Escribe abajo cómo llegaste a los valores de la tabla.</p>
+    </div>
+
+    <div class="campo">
+      <label class="campo-pregunta" for="c-a4proc">Muestra tu procedimiento</label>
+      <span class="campo-ayuda">Al menos el desarrollo completo de una solución de cada serie, con
+      unidades. Si prefieres hacerlo a mano, escríbelo aquí de forma resumida y adjunta la foto de tus
+      cuentas en la descripción de F5.</span>
+      <textarea id="c-a4proc" data-campo="a4proc" data-esencial style="min-height:150px"></textarea>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">5</span><h3>Dos maneras de diluir</h3></div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-a5">
+        ¿Qué diferencias hay entre las diluciones directas y las seriadas? Cita ejemplos en los que se
+        usen estos procedimientos en laboratorios de análisis químico y microbiológico.
+      </label>
+      <textarea id="c-a5" data-campo="a5" data-esencial style="min-height:130px"></textarea>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">6</span><h3>Hasta dónde llegan tus datos</h3></div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-a6">
+        Analiza qué limitaciones tiene el cálculo de las concentraciones preparadas en esta práctica,
+        frente a preparaciones realizadas en un laboratorio de química.
+      </label>
+      <span class="campo-ayuda">Piensa en tus instrumentos, en los supuestos que tuviste que aceptar y
+      en lo que no pudiste verificar.</span>
+      <textarea id="c-a6" data-campo="a6" data-esencial style="min-height:130px"></textarea>
+    </div>
+  </div>
+
+  <!-- Cuestionario integrado -->
+  <div class="tarjeta acento-agua">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">7</span><h3>Tu mirada profesional</h3></div>
+    <p class="campo-ayuda">Tres preguntas que conectan esta experiencia con el ejercicio del Tecnólogo
+    en Regencia de Farmacia.</p>
+
+    <div class="campo">
+      <label class="campo-pregunta" for="c-q1">
+        Imagina que trabajas en una central de mezclas y estás preparando una solución parenteral.
+        ¿Por qué consideras importante medir cuidadosamente las cantidades utilizadas?
+      </label>
+      <textarea id="c-q1" data-campo="q1" data-esencial></textarea>
+    </div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-q2">
+        ¿Qué materiales se usan en un laboratorio de análisis farmacéutico para medir con precisión
+        los volúmenes y las masas? ¿Qué material se usa para preparar soluciones?
+      </label>
+      <textarea id="c-q2" data-campo="q2" data-esencial></textarea>
+    </div>
+    <div class="campo">
+      <label class="campo-pregunta" for="c-q3">
+        Consulta al menos tres técnicas de laboratorio que se usen para determinar la concentración de
+        soluciones en la industria farmacéutica.
+      </label>
+      <span class="campo-ayuda">Cita las fuentes que consultes: hace parte de lo que se valora en tu
+      bitácora.</span>
+      <textarea id="c-q3" data-campo="q3" data-esencial style="min-height:130px"></textarea>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     12 · CONCLUSIONES
+     ====================================================================== -->
+<section class="seccion" id="s-conclusiones" data-titulo="Conclusiones" data-corto="Conclusiones">
+  <p class="eyebrow">Cierre</p>
+  <h2>Tus conclusiones, no las de nadie más</h2>
+  <p class="seccion-intro">
+    Una conclusión no repite el objetivo: responde si lo alcanzaste y con qué evidencia. Apóyate en tus
+    propios datos, incluso si no salieron como esperabas.
+  </p>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Primero, vuelve al comienzo</h3></div>
+    <p class="campo-ayuda">Estas fueron tus respuestas del prelaboratorio:</p>
+    <div id="ecoPrediccionesFinal"></div>
+    <div class="campo" style="margin-top:16px">
+      <label class="campo-pregunta" for="c-c0">¿Cambiarías alguna de ellas? ¿Cuál y por qué?</label>
+      <textarea id="c-c0" data-campo="c0" data-esencial></textarea>
+    </div>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O1</span><h3>Sobre preparar soluciones</h3></div>
+    <p class="campo-ayuda">Preparar soluciones a partir de un soluto sólido y por dilución, siguiendo un
+    procedimiento operativo estándar.</p>
+    <textarea id="c-c1" data-campo="c1" data-esencial aria-label="Conclusión del objetivo 1"></textarea>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O2</span><h3>Sobre diluir de dos maneras</h3></div>
+    <p class="campo-ayuda">Realizar diluciones directas y seriadas, comparando cualitativamente los
+    resultados.</p>
+    <textarea id="c-c2" data-campo="c2" data-esencial aria-label="Conclusión del objetivo 2"></textarea>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O3</span><h3>Sobre calcular la concentración</h3></div>
+    <p class="campo-ayuda">Calcular las unidades de concentración de las soluciones preparadas.</p>
+    <textarea id="c-c3" data-campo="c3" data-esencial aria-label="Conclusión del objetivo 3"></textarea>
+  </div>
+
+  <div class="tarjeta acento-rojo">
+    <div class="tarjeta-titulo"><span class="tarjeta-num">O4</span><h3>Sobre tu ejercicio profesional</h3></div>
+    <p class="campo-ayuda">Interpretar los resultados y relacionarlos con situaciones propias del
+    Tecnólogo en Regencia de Farmacia.</p>
+    <textarea id="c-c4" data-campo="c4" data-esencial aria-label="Conclusión del objetivo 4"></textarea>
+  </div>
+
+  <div class="nota">
+    <p><strong>Una nota sobre honestidad.</strong> Si tus datos no coincidieron con lo que esperabas,
+    repórtalos tal como los obtuviste y explica a qué crees que se debió. Un resultado distinto,
+    acompañado de una explicación honesta, dice más de tu trabajo que un dato ajustado.</p>
+  </div>
+</section>
+
+<!-- ======================================================================
+     13 · BIBLIOGRAFÍA
+     ====================================================================== -->
+<section class="seccion" id="s-bibliografia" data-titulo="Bibliografía" data-corto="Bibliografía">
+  <p class="eyebrow">Para profundizar</p>
+  <h2>Referencias</h2>
+
+  <div class="tarjeta">
+    <ol>
+      <li style="margin-bottom:16px">
+        Brown, T., LeMay, H., Bursten, B. y Burdge, J. (2004). <em>Química: la ciencia central</em>
+        (9.ª ed.). Pearson Education.
+      </li>
+      <li>
+        Petrucci, R. H., Bissonnette, C., Madura, J. D. y Herring, F. G. (2017).
+        <em>Química general: principios y aplicaciones modernas</em>. Pearson Educación.
+      </li>
+    </ol>
+    <div class="nota">
+      <p>Ambos títulos están disponibles en la biblioteca digital de SALESIANA. Si consultaste otras
+      fuentes para responder el análisis, cítalas dentro de tus respuestas.</p>
+    </div>
+  </div>
+
+  <div class="campo tarjeta">
+    <label class="campo-pregunta" for="c-fuentes">Otras fuentes que consultaste</label>
+    <span class="campo-ayuda">Opcional, pero suma: registra aquí lo que usaste para el análisis y el
+    cuestionario.</span>
+    <textarea id="c-fuentes" data-campo="fuentes"></textarea>
+  </div>
+</section>
+
+<!-- ======================================================================
+     14 · BITÁCORA
+     ====================================================================== -->
+<section class="seccion" id="s-bitacora" data-titulo="Tu bitácora" data-corto="Bitácora">
+  <p class="eyebrow">Entrega</p>
+  <h2>Revisa y genera tu bitácora</h2>
+  <p class="seccion-intro">
+    El módulo arma la bitácora con todo lo que registraste. Revísala antes de generar el PDF: es el
+    documento que vas a entregar.
+  </p>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Antes de entregar, pregúntate</h3></div>
+    <p class="campo-ayuda">Esta lista no se califica. Te sirve para revisar tu propio trabajo con los
+    mismos criterios con los que será leído.</p>
+    <label class="casilla"><input type="checkbox" data-campo="auto1">
+      <span class="casilla-texto">Alguien podría repetir mi procedimiento leyendo solo mi bitácora.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="auto2">
+      <span class="casilla-texto">Mis cálculos muestran el procedimiento, no solo el resultado, y llevan unidades.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="auto3">
+      <span class="casilla-texto">Mis conclusiones se apoyan en mis datos y no repiten los objetivos.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="auto4">
+      <span class="casilla-texto">Reporté lo que realmente observé, incluso lo que no esperaba.</span></label>
+    <label class="casilla"><input type="checkbox" data-campo="auto5">
+      <span class="casilla-texto">Cité las fuentes que consulté.</span></label>
+  </div>
+
+  <div class="tarjeta">
+    <div class="tarjeta-titulo"><h3>Estado de tu bitácora</h3></div>
+    <div id="panelValidacion"></div>
+    <div class="grupo-btn no-imprimir">
+      <button type="button" class="btn btn-secundario" id="btnRevisar">Revisar campos pendientes</button>
+      <button type="button" class="btn btn-secundario" id="btnVistaPrevia">Ver la bitácora completa</button>
+      <button type="button" class="btn btn-primario" id="btnPDF">Generar bitácora en PDF</button>
+    </div>
+    <p class="campo-ayuda" style="margin-top:12px">
+      Al pulsar <em>Generar bitácora en PDF</em> se abrirá el diálogo de impresión de tu navegador.
+      Elige <strong>Guardar como PDF</strong> como destino. En el teléfono, la opción aparece dentro de
+      <em>Compartir → Imprimir</em>.
+    </p>
+  </div>
+
+  <div class="tarjeta plana no-imprimir">
+    <div class="tarjeta-titulo"><h3>Tus datos en este dispositivo</h3></div>
+    <p>Todo lo que registraste está guardado únicamente en este navegador. Si vas a usar un equipo
+    compartido, genera primero el PDF y luego borra los datos.</p>
+    <div class="grupo-btn">
+      <button type="button" class="btn btn-peligro" id="btnBorrar">Eliminar todos mis datos</button>
+    </div>
+  </div>
+
+  <footer class="pie-modulo no-imprimir">
+    <div class="pie-marcas">
+      <div>
+        <!-- LOGO INSTITUCIONAL -->
+        <img class="logo-img" id="logoInstitucionalPie" src="logosalesiana.png" alt="Fundación Universitaria Salesiana">
+        <span class="logo-hueco institucional" id="huecoInstitucionalPie">LOGO<br>INSTITUCIONAL</span>
+        <!-- /LOGO INSTITUCIONAL -->
+      </div>
+      <div>
+        <!-- LOGO DESARROLLO -->
+        <img class="logo-img" id="logoDesarrollo" src="ese.png" alt="ESE · diseño del entorno de aprendizaje">
+        <span class="logo-hueco desarrollo" id="huecoDesarrollo">LOGO<br>DESARROLLO</span>
+        <!-- /LOGO DESARROLLO -->
+      </div>
+    </div>
+    <p>Experiencia casera de aprendizaje · Soluciones y diluciones<br>
+    Química General 1 · Tecnología en Regencia de Farmacia · Facultad de Ciencias Exactas y Naturales</p>
+    <p><strong>Guía de la práctica y diseño del entorno de aprendizaje:</strong><br>
+    Sergio Andrés Patiño Martínez · Profesor tiempo completo<br>
+    Facultad de Ciencias Exactas y Naturales · Fundación Universitaria Salesiana</p>
+  </footer>
+</section>
+
+</div><!-- /#app -->
+
+<!-- ======================================================================
+     DOCUMENTO IMPRIMIBLE
+     ====================================================================== -->
+<div id="documentoBitacora" aria-live="polite"></div>
+
+</main>
+
+<!-- ======================================================================
+     NAVEGACIÓN INFERIOR
+     ====================================================================== -->
+<nav class="pie-nav no-imprimir" aria-label="Navegación entre secciones">
+  <div class="pie-nav-fila">
+    <button type="button" class="btn btn-secundario" id="btnAnterior">← Anterior</button>
+    <button type="button" class="pie-nav-centro" id="btnMenu" aria-haspopup="dialog">
+      Secciones ▾
+    </button>
+    <button type="button" class="btn btn-primario" id="btnSiguiente">Siguiente →</button>
+  </div>
+</nav>
+
+<div class="menu-secciones no-imprimir" id="menuSecciones" role="dialog" aria-modal="true" aria-label="Ir a una sección">
+  <div class="menu-panel">
+    <div class="tarjeta-titulo" style="justify-content:space-between">
+      <h3>Ir a una sección</h3>
+      <button type="button" class="btn btn-suave" id="btnCerrarMenu">Cerrar</button>
+    </div>
+    <ul class="menu-lista" id="listaMenu"></ul>
+    <div class="grupo-btn">
+      <button type="button" class="btn btn-suave" id="btnInicio">Volver al inicio</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   MÓDULO INTERACTIVO · SOLUCIONES Y DILUCIONES
+   JavaScript vanilla, sin dependencias externas.
+   Organizado en bloques: modelo · almacenamiento · campos · fotografías ·
+   lienzo · navegación · progreso · validación · bitácora · PDF · limpieza.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  /* ======================================================================
+     1. MODELO Y CONSTANTES
+     ====================================================================== */
+  var CLAVE_DATOS = 'qg1.soluciones.datos.v1';
+  var CLAVE_IMAGENES = 'qg1.soluciones.imagenes.v1';
+
+  var SOLUCIONES = ['M', 'DD1', 'DD2', 'DD3', 'DD4', 'DS1', 'DS2', 'DS3', 'DS4'];
+  var FOTOS = [
+    { clave: 'F1', titulo: 'Espacio de trabajo organizado' },
+    { clave: 'F2', titulo: 'Vasos B y M' },
+    { clave: 'F3', titulo: 'Serie de dilución directa' },
+    { clave: 'F4', titulo: 'Serie de dilución seriada' },
+    { clave: 'F5', titulo: 'Espacio de trabajo al culminar' }
+  ];
+  var VOLUMENES_DD = { DD1: 10, DD2: 5, DD3: 2, DD4: 1 };
+  var PARTIDA_DS = { DS1: 'M', DS2: 'DS1', DS3: 'DS2', DS4: 'DS3' };
+
+  var datos = {};      // respuestas de texto, números y casillas
+  var imagenes = {};   // dataURL de las fotografías y del dibujo
+  var seccionActual = 0;
+  var secciones = [];
+  var temporizador = null;
+
+  /* ======================================================================
+     2. UTILIDADES
+     ====================================================================== */
+  function $(sel, raiz) { return (raiz || document).querySelector(sel); }
+  function $$(sel, raiz) { return Array.prototype.slice.call((raiz || document).querySelectorAll(sel)); }
+
+  function escaparHTML(txt) {
+    return String(txt == null ? '' : txt)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function tieneValor(v) {
+    if (v === true) return true;
+    if (v === false || v == null) return false;
+    return String(v).trim() !== '';
+  }
+
+  function fechaLegible(iso) {
+    if (!iso) return '';
+    var p = iso.split('-');
+    if (p.length !== 3) return iso;
+    var meses = ['enero','febrero','marzo','abril','mayo','junio','julio',
+                 'agosto','septiembre','octubre','noviembre','diciembre'];
+    return parseInt(p[2], 10) + ' de ' + meses[parseInt(p[1], 10) - 1] + ' de ' + p[0];
+  }
+
+  /* ======================================================================
+     3. ALMACENAMIENTO LOCAL
+     ====================================================================== */
+  function recuperar() {
+    try {
+      var d = localStorage.getItem(CLAVE_DATOS);
+      datos = d ? JSON.parse(d) : {};
+    } catch (e) { datos = {}; }
+    try {
+      var i = localStorage.getItem(CLAVE_IMAGENES);
+      imagenes = i ? JSON.parse(i) : {};
+    } catch (e) { imagenes = {}; }
+  }
+
+  function guardarDatos() {
+    try {
+      localStorage.setItem(CLAVE_DATOS, JSON.stringify(datos));
+      indicarGuardado(true);
+      return true;
+    } catch (e) {
+      indicarGuardado(false, 'Sin espacio para guardar');
+      return false;
+    }
+  }
+
+  function guardarImagenes() {
+    try {
+      localStorage.setItem(CLAVE_IMAGENES, JSON.stringify(imagenes));
+      indicarGuardado(true);
+      return true;
+    } catch (e) {
+      alert('El navegador no tiene espacio suficiente para guardar más fotografías.\n\n' +
+            'Puedes eliminar alguna imagen que ya no necesites, o generar el PDF ahora ' +
+            'para conservar lo que llevas.');
+      indicarGuardado(false, 'Sin espacio para las fotos');
+      return false;
+    }
+  }
+
+  function guardarConRetraso() {
+    indicarGuardado(false, 'Guardando…');
+    clearTimeout(temporizador);
+    temporizador = setTimeout(function () {
+      guardarDatos();
+      actualizarProgreso();
+    }, 450);
+  }
+
+  function indicarGuardado(listo, texto) {
+    var punto = $('#puntoGuardado');
+    var etiqueta = $('#textoGuardado');
+    if (!punto || !etiqueta) return;
+    if (listo) {
+      punto.classList.remove('activo');
+      etiqueta.textContent = 'Guardado';
+    } else {
+      punto.classList.add('activo');
+      etiqueta.textContent = texto || 'Guardando…';
+    }
+  }
+
+  /* ======================================================================
+     4. TABLAS GENERADAS
+     ====================================================================== */
+  function construirTablaOrden() {
+    var cuerpo = $('#cuerpoOrden');
+    if (!cuerpo) return;
+    var html = '';
+    for (var i = 1; i <= 9; i++) {
+      var etiqueta = i === 1 ? '1 · más intensa' : (i === 9 ? '9 · más clara' : String(i));
+      html += '<tr><th scope="row" class="dato-fijo">' + etiqueta + '</th><td>' +
+              '<select data-campo="orden' + i + '" aria-label="Solución en la posición ' + i + '">' +
+              '<option value="">Elige…</option>';
+      for (var j = 0; j < SOLUCIONES.length; j++) {
+        html += '<option value="' + SOLUCIONES[j] + '">' + SOLUCIONES[j] + '</option>';
+      }
+      html += '</select></td></tr>';
+    }
+    cuerpo.innerHTML = html;
+  }
+
+  function construirTablaCalculos() {
+    var cuerpo = $('#cuerpoCalculos');
+    if (!cuerpo) return;
+    var html = '';
+    SOLUCIONES.forEach(function (s) {
+      html += '<tr><th scope="row" class="rotulo">' + s + '</th>' +
+        '<td><input type="text" inputmode="decimal" data-campo="calc_' + s + '_mm" aria-label="Porcentaje masa masa de ' + s + '"></td>' +
+        '<td><input type="text" inputmode="decimal" data-campo="calc_' + s + '_mv" aria-label="Porcentaje masa volumen de ' + s + '"></td>' +
+        '<td><input type="text" inputmode="decimal" data-campo="calc_' + s + '_ppm" aria-label="Partes por millón de ' + s + '"></td></tr>';
+    });
+    cuerpo.innerHTML = html;
+  }
+
+  /* ======================================================================
+     5. VINCULACIÓN DE CAMPOS
+     ====================================================================== */
+  function vincularCampos() {
+    $$('[data-campo]').forEach(function (el) {
+      var clave = el.dataset.campo;
+
+      // Restaurar valor guardado
+      if (el.type === 'checkbox') {
+        el.checked = datos[clave] === true;
+      } else if (datos[clave] != null) {
+        el.value = datos[clave];
+      }
+
+      var evento = (el.tagName === 'SELECT' || el.type === 'checkbox' || el.type === 'date')
+        ? 'change' : 'input';
+
+      el.addEventListener(evento, function () {
+        datos[clave] = (el.type === 'checkbox') ? el.checked : el.value;
+        el.classList.remove('pendiente');
+        guardarConRetraso();
+        if (clave.indexOf('seg') === 0) revisarCompromiso();
+      });
+    });
+    revisarCompromiso();
+  }
+
+  function revisarCompromiso() {
+    var aviso = $('#avisoSeguridad');
+    if (!aviso) return;
+    var completo = ['seg1','seg2','seg3','seg4','seg5'].every(function (k) { return datos[k] === true; });
+    aviso.hidden = !completo;
+  }
+
+  /* ======================================================================
+     6. FOTOGRAFÍAS
+     ====================================================================== */
+  function procesarImagen(archivo, alListo) {
+    if (!archivo || !/^image\//.test(archivo.type)) {
+      alert('Ese archivo no es una imagen. Acepta JPEG, PNG o WebP.');
+      return;
+    }
+    var lector = new FileReader();
+    lector.onload = function (ev) {
+      var img = new Image();
+      img.onload = function () {
+        var MAX = 1280;
+        var ancho = img.width, alto = img.height;
+        if (ancho > MAX || alto > MAX) {
+          var factor = Math.min(MAX / ancho, MAX / alto);
+          ancho = Math.round(ancho * factor);
+          alto = Math.round(alto * factor);
+        }
+        alListo(comprimir(img, ancho, alto));
+      };
+      img.onerror = function () { alert('No fue posible leer esa imagen. Intenta con otra.'); };
+      img.src = ev.target.result;
+    };
+    lector.readAsDataURL(archivo);
+  }
+
+  /**
+   * Redibuja la imagen y baja la calidad por pasos hasta que el resultado
+   * quepa con holgura en el almacenamiento local del navegador.
+   */
+  function comprimir(img, ancho, alto) {
+    var LIMITE = 620000; // caracteres del dataURL, cerca de 460 kB reales
+    var calidades = [0.72, 0.62, 0.52];
+    var resultado = '';
+    for (var intento = 0; intento < 2; intento++) {
+      var lienzo = document.createElement('canvas');
+      lienzo.width = ancho; lienzo.height = alto;
+      var ctx = lienzo.getContext('2d');
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, ancho, alto);
+      ctx.drawImage(img, 0, 0, ancho, alto);
+      for (var i = 0; i < calidades.length; i++) {
+        resultado = lienzo.toDataURL('image/jpeg', calidades[i]);
+        if (resultado.length <= LIMITE) return resultado;
+      }
+      ancho = Math.round(ancho * 0.78);
+      alto = Math.round(alto * 0.78);
+    }
+    return resultado;
+  }
+
+  function pintarFoto(clave) {
+    var contenedor = $('[data-foto="' + clave + '"]');
+    if (!contenedor) return;
+    var img = $('[data-foto-img="' + clave + '"]', contenedor);
+    if (imagenes[clave]) {
+      img.src = imagenes[clave];
+      contenedor.classList.add('con-foto');
+    } else {
+      img.removeAttribute('src');
+      contenedor.classList.remove('con-foto');
+    }
+  }
+
+  function vincularFotos() {
+    $$('[data-foto-input]').forEach(function (entrada) {
+      entrada.addEventListener('change', function () {
+        var clave = entrada.dataset.fotoInput;
+        procesarImagen(entrada.files[0], function (dataURL) {
+          imagenes[clave] = dataURL;
+          if (guardarImagenes()) {
+            pintarFoto(clave);
+            actualizarProgreso();
+            actualizarResumenRegistro();
+          }
+        });
+        entrada.value = '';
+      });
+    });
+
+    $$('[data-foto-borrar]').forEach(function (boton) {
+      boton.addEventListener('click', function () {
+        var clave = boton.dataset.fotoBorrar;
+        if (!confirm('¿Eliminar la fotografía ' + clave + '? Podrás cargar otra en su lugar.')) return;
+        delete imagenes[clave];
+        guardarImagenes();
+        pintarFoto(clave);
+        actualizarProgreso();
+        actualizarResumenRegistro();
+      });
+    });
+
+    FOTOS.forEach(function (f) { pintarFoto(f.clave); });
+  }
+
+  /* ======================================================================
+     7. LIENZO DE DIBUJO (predicción 2)
+     ====================================================================== */
+  function iniciarLienzo() {
+    var lienzo = $('#lienzoPrediccion');
+    if (!lienzo) return;
+    var ctx = lienzo.getContext('2d');
+    var dibujando = false;
+
+    function fondo() {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, lienzo.width, lienzo.height);
+      ctx.strokeStyle = '#1B2430';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+
+    fondo();
+    if (imagenes.D1 && !imagenes.D1foto) {
+      var previo = new Image();
+      previo.onload = function () { ctx.drawImage(previo, 0, 0, lienzo.width, lienzo.height); };
+      previo.src = imagenes.D1;
+    }
+
+    function posicion(ev) {
+      var caja = lienzo.getBoundingClientRect();
+      return {
+        x: (ev.clientX - caja.left) * (lienzo.width / caja.width),
+        y: (ev.clientY - caja.top) * (lienzo.height / caja.height)
+      };
+    }
+
+    lienzo.addEventListener('pointerdown', function (ev) {
+      dibujando = true;
+      lienzo.setPointerCapture(ev.pointerId);
+      var p = posicion(ev);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + 0.1, p.y);
+      ctx.stroke();
+    });
+    lienzo.addEventListener('pointermove', function (ev) {
+      if (!dibujando) return;
+      var p = posicion(ev);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (nombre) {
+      lienzo.addEventListener(nombre, function () {
+        if (!dibujando) return;
+        dibujando = false;
+        imagenes.D1 = lienzo.toDataURL('image/jpeg', 0.7);
+        delete imagenes.D1foto;
+        guardarImagenes();
+      });
+    });
+
+    $('#btnLimpiarLienzo').addEventListener('click', function () {
+      fondo();
+      delete imagenes.D1;
+      delete imagenes.D1foto;
+      guardarImagenes();
+      $('#cajaDibujoFoto').classList.add('oculto');
+      $('#cajaLienzo').classList.remove('oculto');
+    });
+
+    $('#fileDibujo').addEventListener('change', function (ev) {
+      procesarImagen(ev.target.files[0], function (dataURL) {
+        imagenes.D1 = dataURL;
+        imagenes.D1foto = true;
+        if (guardarImagenes()) mostrarDibujoFoto();
+      });
+      ev.target.value = '';
+    });
+
+    $('#btnQuitarDibujoFoto').addEventListener('click', function () {
+      delete imagenes.D1;
+      delete imagenes.D1foto;
+      guardarImagenes();
+      $('#cajaDibujoFoto').classList.add('oculto');
+      $('#cajaLienzo').classList.remove('oculto');
+      fondo();
+    });
+
+    if (imagenes.D1foto) mostrarDibujoFoto();
+  }
+
+  function mostrarDibujoFoto() {
+    $('#vistaDibujoFoto').src = imagenes.D1;
+    $('#cajaDibujoFoto').classList.remove('oculto');
+    $('#cajaLienzo').classList.add('oculto');
+  }
+
+  /* ======================================================================
+     8. NAVEGACIÓN
+     ====================================================================== */
+  function iniciarNavegacion() {
+    secciones = $$('#app .seccion');
+
+    // Barra de progreso con forma de serie de vasos
+    var serie = $('#serieProgreso');
+    serie.innerHTML = secciones.map(function (s, i) {
+      return '<button type="button" class="serie-vaso" data-indice="' + i + '" ' +
+             'title="' + escaparHTML(s.dataset.titulo) + '">' +
+             '<span class="solo-lectores">' + escaparHTML(s.dataset.titulo) + '</span></button>';
+    }).join('');
+    $$('.serie-vaso', serie).forEach(function (b) {
+      b.addEventListener('click', function () { irA(parseInt(b.dataset.indice, 10)); });
+    });
+
+    // Menú de secciones
+    $('#listaMenu').innerHTML = secciones.map(function (s, i) {
+      return '<li><button type="button" data-indice="' + i + '">' +
+             '<span class="menu-indice">' + (i + 1) + '</span>' +
+             '<span>' + escaparHTML(s.dataset.titulo) + '</span>' +
+             '<span class="menu-marca" data-marca="' + i + '"></span></button></li>';
+    }).join('');
+    $$('#listaMenu button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        irA(parseInt(b.dataset.indice, 10));
+        cerrarMenu();
+      });
+    });
+
+    $('#btnAnterior').addEventListener('click', function () { irA(seccionActual - 1); });
+    $('#btnSiguiente').addEventListener('click', function () { irA(seccionActual + 1); });
+    $('#btnMenu').addEventListener('click', abrirMenu);
+    $('#btnCerrarMenu').addEventListener('click', cerrarMenu);
+    $('#menuSecciones').addEventListener('click', function (ev) {
+      if (ev.target.id === 'menuSecciones') cerrarMenu();
+    });
+    $('#btnInicio').addEventListener('click', function () { irA(0); cerrarMenu(); });
+
+    $$('[data-ir]').forEach(function (b) {
+      b.addEventListener('click', function () { irAPorId(b.dataset.ir); });
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') cerrarMenu();
+    });
+  }
+
+  function irA(indice) {
+    if (indice < 0 || indice >= secciones.length) return;
+    secciones[seccionActual].classList.remove('visible');
+    seccionActual = indice;
+    secciones[seccionActual].classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+
+    $('#btnAnterior').disabled = (indice === 0);
+    $('#btnSiguiente').disabled = (indice === secciones.length - 1);
+    $('#etiquetaSeccion').textContent = secciones[indice].dataset.corto;
+    $('#btnMenu').textContent = (indice + 1) + ' / ' + secciones.length + ' · ' +
+                                secciones[indice].dataset.corto + ' ▾';
+
+    var id = secciones[indice].id;
+    if (id === 's-registro') actualizarResumenRegistro();
+    if (id === 's-analisis' || id === 's-conclusiones') pintarEcoPredicciones();
+    if (id === 's-bitacora') pintarPanelValidacion();
+
+    actualizarProgreso();
+    secciones[indice].setAttribute('tabindex', '-1');
+    secciones[indice].focus({ preventScroll: true });
+  }
+
+  function irAPorId(id) {
+    for (var i = 0; i < secciones.length; i++) {
+      if (secciones[i].id === id) { irA(i); return; }
+    }
+  }
+
+  function abrirMenu() {
+    actualizarProgreso();
+    $('#menuSecciones').classList.add('abierto');
+    $('#btnCerrarMenu').focus();
+  }
+  function cerrarMenu() {
+    $('#menuSecciones').classList.remove('abierto');
+  }
+
+  /* ======================================================================
+     9. PROGRESO
+     ====================================================================== */
+  function itemsEsenciales(seccion) {
+    var items = $$('[data-esencial]', seccion).map(function (el) {
+      return { tipo: 'campo', el: el, seccion: seccion.id };
+    });
+    if (seccion.id === 's-prelab') {
+      items.push({
+        tipo: 'foto', clave: 'D1', seccion: seccion.id,
+        etiqueta: 'Dibujo de la predicción sobre los tres vasos'
+      });
+    }
+    if (seccion.id === 's-procedimiento') {
+      FOTOS.forEach(function (f) {
+        items.push({
+          tipo: 'foto', clave: f.clave, titulo: f.titulo, seccion: seccion.id,
+          etiqueta: 'Fotografía ' + f.clave + ' · ' + f.titulo
+        });
+      });
+    }
+    return items;
+  }
+
+  function itemCompleto(item) {
+    if (item.tipo === 'foto') return !!imagenes[item.clave];
+    var el = item.el;
+    if (el.type === 'checkbox') return el.checked === true;
+    return tieneValor(el.value);
+  }
+
+  function todosLosItems() {
+    var todos = [];
+    secciones.forEach(function (s) { todos = todos.concat(itemsEsenciales(s)); });
+    return todos;
+  }
+
+  function etiquetaDe(item) {
+    if (item.etiqueta) return item.etiqueta;
+    if (item.tipo === 'foto') return 'Fotografía ' + item.clave;
+    var el = item.el;
+    var texto = '';
+    if (el.id) {
+      var lab = document.querySelector('label[for="' + el.id + '"]');
+      if (lab) texto = lab.textContent;
+    }
+    if (!texto && el.getAttribute('aria-label')) texto = el.getAttribute('aria-label');
+    if (!texto) {
+      var casilla = el.closest('.casilla');
+      if (casilla) texto = casilla.textContent;
+    }
+    if (!texto) {
+      var campo = el.closest('.campo') || el.closest('.tarjeta');
+      if (campo) {
+        var preg = campo.querySelector('.campo-pregunta');
+        if (preg) texto = preg.textContent;
+      }
+    }
+    texto = (texto || 'Campo sin diligenciar').replace(/\s+/g, ' ').trim();
+    return texto.length > 82 ? texto.slice(0, 80) + '…' : texto;
+  }
+
+  function actualizarProgreso() {
+    var total = 0, hechos = 0;
+
+    secciones.forEach(function (s, i) {
+      var items = itemsEsenciales(s);
+      var completos = items.filter(itemCompleto).length;
+      total += items.length;
+      hechos += completos;
+
+      var vaso = $('.serie-vaso[data-indice="' + i + '"]');
+      if (vaso) {
+        var estado = 'vacio';
+        if (items.length === 0) estado = (i < seccionActual ? 'hecho' : 'vacio');
+        else if (completos === items.length) estado = 'hecho';
+        else if (completos > 0) estado = 'parcial';
+        vaso.dataset.estado = estado;
+        if (i === seccionActual) vaso.setAttribute('aria-current', 'step');
+        else vaso.removeAttribute('aria-current');
+      }
+
+      var marca = $('[data-marca="' + i + '"]');
+      if (marca) {
+        marca.textContent = items.length === 0 ? '' :
+          (completos === items.length ? '✓' : completos + '/' + items.length);
+      }
+      var botonMenu = marca ? marca.closest('button') : null;
+      if (botonMenu) {
+        if (i === seccionActual) botonMenu.setAttribute('aria-current', 'step');
+        else botonMenu.removeAttribute('aria-current');
+      }
+    });
+
+    var pct = total === 0 ? 0 : Math.round((hechos / total) * 100);
+    $('#etiquetaAvance').textContent = pct + ' % diligenciado';
+  }
+
+  /* ======================================================================
+     10. ECOS: RETOMAR LAS PREDICCIONES Y RESUMIR EL REGISTRO
+     ====================================================================== */
+  var PREGUNTAS_PRELAB = {
+    p1: 'Al duplicar el volumen de una bebida coloreada, ¿qué le ocurrirá al color?',
+    p2: 'Los tres vasos con distinta proporción de bebida y agua',
+    p3: '¿Es posible medir siempre el mismo volumen con una cuchara?',
+    p4: 'Dos situaciones en las que debas preparar soluciones'
+  };
+
+  function bloqueEco(clave) {
+    var v = datos[clave];
+    var cuerpo = tieneValor(v)
+      ? '<div class="doc-respuesta">' + escaparHTML(v) + '</div>'
+      : '<div class="doc-respuesta vacia">No registraste respuesta a esta pregunta.</div>';
+    return '<div class="doc-item"><div class="doc-pregunta">' +
+           escaparHTML(PREGUNTAS_PRELAB[clave]) + '</div>' + cuerpo + '</div>';
+  }
+
+  function pintarEcoPredicciones() {
+    var html = ['p1', 'p2', 'p3', 'p4'].map(bloqueEco).join('');
+    ['#ecoPredicciones', '#ecoPrediccionesFinal'].forEach(function (sel) {
+      var caja = $(sel);
+      if (caja) caja.innerHTML = html;
+    });
+  }
+
+  function actualizarResumenRegistro() {
+    var caja = $('#resumenRegistro');
+    if (!caja) return;
+
+    var filas = [];
+    FOTOS.forEach(function (f) {
+      filas.push({
+        etiqueta: f.clave + ' · ' + f.titulo,
+        listo: !!imagenes[f.clave]
+      });
+    });
+    [['obs1', 'Observaciones de la etapa 1'],
+     ['obs2', 'Observaciones de la etapa 2'],
+     ['obs3', 'Observaciones de la etapa 3']].forEach(function (par) {
+      filas.push({ etiqueta: par[1], listo: tieneValor(datos[par[0]]) });
+    });
+
+    var dd = ['DD1','DD2','DD3','DD4'].filter(function (r) { return tieneValor(datos['obs' + r]); }).length;
+    var ds = ['DS1','DS2','DS3','DS4'].filter(function (r) { return tieneValor(datos['obs' + r]); }).length;
+    filas.push({ etiqueta: 'Tabla de dilución directa (' + dd + ' de 4 vasos descritos)', listo: dd === 4 });
+    filas.push({ etiqueta: 'Tabla de dilución seriada (' + ds + ' de 4 vasos descritos)', listo: ds === 4 });
+
+    caja.innerHTML = '<div class="tabla-envoltura"><table><tbody>' + filas.map(function (f) {
+      return '<tr><td style="width:2.4em;text-align:center">' +
+             (f.listo ? '<span style="color:var(--logro);font-weight:700">✓</span>'
+                      : '<span style="color:var(--ambar);font-weight:700">•</span>') +
+             '</td><td>' + escaparHTML(f.etiqueta) + '</td></tr>';
+    }).join('') + '</tbody></table></div>' +
+    '<p class="campo-ayuda" style="margin-top:10px">Un punto ámbar señala algo que aún puedes completar. ' +
+    'Vuelve a la sección del procedimiento cuando quieras.</p>';
+  }
+
+  /* ======================================================================
+     11. VALIDACIÓN AMABLE
+     ====================================================================== */
+  function pendientes() {
+    return todosLosItems().filter(function (item) { return !itemCompleto(item); });
+  }
+
+  function pintarPanelValidacion(marcar) {
+    var panel = $('#panelValidacion');
+    if (!panel) return;
+    var faltan = pendientes();
+
+    $$('.pendiente').forEach(function (el) { el.classList.remove('pendiente'); });
+
+    if (faltan.length === 0) {
+      panel.innerHTML = '<div class="nota logro"><p><strong>Tu bitácora está completa.</strong> ' +
+        'Revísala una última vez con el botón de vista previa y genera el PDF.</p></div>';
+      return;
+    }
+
+    if (marcar) {
+      faltan.forEach(function (item) {
+        if (item.tipo === 'campo') item.el.classList.add('pendiente');
+      });
+    }
+
+    var lista = faltan.slice(0, 14).map(function (item, i) {
+      return '<li><button type="button" data-pendiente="' + i + '">' +
+             escaparHTML(etiquetaDe(item)) + '</button></li>';
+    }).join('');
+
+    var extra = faltan.length > 14
+      ? '<p class="campo-ayuda">Y ' + (faltan.length - 14) + ' más.</p>' : '';
+
+    panel.innerHTML = '<div class="nota atencion">' +
+      '<p><strong>Tu bitácora está casi lista.</strong> Quedan ' + faltan.length +
+      ' campos por revisar antes de generar el PDF. Puedes ir directamente a cada uno:</p>' +
+      '<ul class="lista-pendientes">' + lista + '</ul>' + extra + '</div>';
+
+    $$('[data-pendiente]', panel).forEach(function (boton) {
+      boton.addEventListener('click', function () {
+        var item = faltan[parseInt(boton.dataset.pendiente, 10)];
+        irAPorId(item.seccion);
+        setTimeout(function () {
+          var destino = item.tipo === 'foto'
+            ? $('[data-foto="' + item.clave + '"]')
+            : item.el;
+          if (destino) {
+            destino.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if (item.tipo === 'campo') item.el.focus({ preventScroll: true });
+          }
+        }, 80);
+      });
+    });
+  }
+
+  /* ======================================================================
+     12. CONSTRUCCIÓN DE LA BITÁCORA
+     ====================================================================== */
+  function item(pregunta, clave) {
+    var v = datos[clave];
+    var cuerpo = tieneValor(v)
+      ? '<div class="doc-respuesta">' + escaparHTML(v) + '</div>'
+      : '<div class="doc-respuesta vacia">Sin registrar.</div>';
+    return '<div class="doc-item"><div class="doc-pregunta">' + escaparHTML(pregunta) +
+           '</div>' + cuerpo + '</div>';
+  }
+
+  function figura(clave, titulo, claveDesc) {
+    if (!imagenes[clave]) {
+      return '<div class="doc-item"><div class="doc-pregunta">' + clave + ' · ' +
+             escaparHTML(titulo) + '</div>' +
+             '<div class="doc-respuesta vacia">Fotografía no incorporada.</div></div>';
+    }
+    var desc = datos[claveDesc];
+    return '<figure class="doc-figura">' +
+      '<img src="' + imagenes[clave] + '" alt="Evidencia ' + clave + ': ' + escaparHTML(titulo) + '">' +
+      '<figcaption><span class="doc-pie-clave">' + clave + '</span> · ' + escaparHTML(titulo) +
+      (tieneValor(desc) ? '<br>' + escaparHTML(desc) : '') +
+      '</figcaption></figure>';
+  }
+
+  function tablaSerie(titulo, filas) {
+    var html = '<table><caption>' + escaparHTML(titulo) + '</caption><thead><tr>' +
+      '<th>Rótulo</th><th>Solución de partida</th><th>Volumen tomado (mL)</th>' +
+      '<th>Observación registrada</th></tr></thead><tbody>';
+    filas.forEach(function (f) {
+      var obs = datos['obs' + f.rotulo];
+      html += '<tr><td class="doc-marcado">' + f.rotulo + '</td>' +
+              '<td class="doc-marcado">' + f.partida + '</td>' +
+              '<td class="doc-marcado">' + f.volumen + '</td>' +
+              '<td>' + (tieneValor(obs) ? escaparHTML(obs) : '—') + '</td></tr>';
+    });
+    return html + '</tbody></table>';
+  }
+
+  function tablaConcentraciones() {
+    var html = '<table><caption>Concentración de las nueve soluciones preparadas</caption>' +
+      '<thead><tr><th>Solución</th><th>% m/m</th><th>% m/v</th><th>ppm</th></tr></thead><tbody>';
+    SOLUCIONES.forEach(function (s) {
+      html += '<tr><td class="doc-marcado">' + s + '</td>' +
+        '<td>' + (tieneValor(datos['calc_' + s + '_mm']) ? escaparHTML(datos['calc_' + s + '_mm']) : '—') + '</td>' +
+        '<td>' + (tieneValor(datos['calc_' + s + '_mv']) ? escaparHTML(datos['calc_' + s + '_mv']) : '—') + '</td>' +
+        '<td>' + (tieneValor(datos['calc_' + s + '_ppm']) ? escaparHTML(datos['calc_' + s + '_ppm']) : '—') + '</td></tr>';
+    });
+    return html + '</tbody></table>';
+  }
+
+  function tablaOrdenamiento() {
+    var hay = false;
+    var filas = '';
+    for (var i = 1; i <= 9; i++) {
+      var v = datos['orden' + i];
+      if (tieneValor(v)) hay = true;
+      filas += '<tr><td>' + i + '</td><td class="doc-marcado">' +
+               (tieneValor(v) ? escaparHTML(v) : '—') + '</td></tr>';
+    }
+    if (!hay) return '<div class="doc-respuesta vacia">Ordenamiento sin registrar.</div>';
+    return '<table><caption>Ordenamiento observado · 1 = color más intenso</caption>' +
+           '<thead><tr><th>Posición</th><th>Solución</th></tr></thead><tbody>' +
+           filas + '</tbody></table>';
+  }
+
+  function listaCompromiso() {
+    var textos = {
+      seg1: 'Mi espacio de trabajo está limpio y organizado.',
+      seg2: 'Tengo todos los materiales necesarios.',
+      seg3: 'Las soluciones permanecerán alejadas de alimentos.',
+      seg4: 'Al finalizar limpiaré el área de trabajo.',
+      seg5: 'Leí las medidas de seguridad y suspenderé la práctica si algo me parece inseguro.'
+    };
+    return '<ul>' + Object.keys(textos).map(function (k) {
+      return '<li>' + (datos[k] === true ? '☑' : '☐') + ' ' + escaparHTML(textos[k]) + '</li>';
+    }).join('') + '</ul>';
+  }
+
+  function marcasDocumento() {
+    var inst = $('#logoInstitucional');
+    var des = $('#logoDesarrollo');
+    var izq = (inst && !inst.hidden && inst.getAttribute('src'))
+      ? '<img class="logo-img" src="' + inst.getAttribute('src') + '" alt="Fundación Universitaria Salesiana">'
+      : '<span class="logo-hueco institucional">LOGO<br>INSTITUCIONAL</span>';
+    var der = (des && !des.hidden && des.getAttribute('src'))
+      ? '<img class="logo-img" src="' + des.getAttribute('src') + '" alt="Marca de desarrollo">'
+      : '<span class="logo-hueco desarrollo">LOGO<br>DESARROLLO</span>';
+    return { izq: izq, der: der };
+  }
+
+  function construirBitacora() {
+    var marcas = marcasDocumento();
+    var nombre = tieneValor(datos.nombre) ? datos.nombre : 'Estudiante sin identificar';
+    var dibujoHTML = imagenes.D1
+      ? '<figure class="doc-figura"><img src="' + imagenes.D1 + '" alt="Dibujo de predicción">' +
+        '<figcaption>Dibujo de la predicción sobre los tres vasos</figcaption></figure>'
+      : '<div class="doc-respuesta vacia">Sin dibujo registrado.</div>';
+
+    var html = '<article class="doc">';
+
+    /* --- Portada --- */
+    html += '<header class="doc-portada">' +
+      '<div class="doc-marcas">' + marcas.izq + marcas.der + '</div>' +
+      '<div class="doc-institucion">Fundación Universitaria Salesiana · Facultad de Ciencias Exactas y Naturales</div>' +
+      '<h1>Bitácora de laboratorio</h1>' +
+      '<p class="doc-subtitulo">Soluciones: preparación y diluciones · Experiencia casera de aprendizaje</p>' +
+      '<dl class="doc-datos">' +
+        '<dt>Estudiante</dt><dd>' + escaparHTML(nombre) + '</dd>' +
+        '<dt>Documento o código</dt><dd>' + escaparHTML(datos.documento || '—') + '</dd>' +
+        '<dt>Correo</dt><dd>' + escaparHTML(datos.correo || '—') + '</dd>' +
+        '<dt>Fecha de la práctica</dt><dd>' + escaparHTML(fechaLegible(datos.fecha) || '—') + '</dd>' +
+        '<dt>Asignatura</dt><dd>Química General 1 · Unidad 2</dd>' +
+        '<dt>Programa</dt><dd>Tecnología en Regencia de Farmacia</dd>' +
+        '<dt>Profesor</dt><dd>Sergio Andrés Patiño Martínez</dd>' +
+      '</dl></header>';
+
+    /* --- 1. Predicciones --- */
+    html += '<h2>1. Predicciones iniciales</h2>' +
+      '<p class="campo-ayuda">Respuestas registradas antes de iniciar la experimentación.</p>' +
+      item(PREGUNTAS_PRELAB.p1, 'p1') +
+      '<h3>Los tres vasos con distinta proporción</h3>' + dibujoHTML +
+      item('Explicación del dibujo', 'p2') +
+      item(PREGUNTAS_PRELAB.p3, 'p3') +
+      item(PREGUNTAS_PRELAB.p4, 'p4');
+
+    /* --- 2. Seguridad --- */
+    html += '<h2>2. Compromiso de seguridad</h2>' + listaCompromiso();
+
+    /* --- 3. Registro experimental --- */
+    html += '<h2>3. Registro experimental</h2>' +
+      '<h3>Etapa 1 · Material y solución madre</h3>' +
+      figura('F1', 'Espacio de trabajo organizado', 'descF1') +
+      figura('F2', 'Vasos B y M al terminar la etapa', 'descF2') +
+      item('Observaciones de la etapa 1', 'obs1') +
+      '<h3>Etapa 2 · Diluciones directas</h3>' +
+      tablaSerie('Serie de dilución directa', [
+        { rotulo: 'DD1', partida: 'M', volumen: VOLUMENES_DD.DD1 },
+        { rotulo: 'DD2', partida: 'M', volumen: VOLUMENES_DD.DD2 },
+        { rotulo: 'DD3', partida: 'M', volumen: VOLUMENES_DD.DD3 },
+        { rotulo: 'DD4', partida: 'M', volumen: VOLUMENES_DD.DD4 }
+      ]) +
+      figura('F3', 'Serie de dilución directa', 'descF3') +
+      item('Observaciones de la etapa 2', 'obs2') +
+      '<h3>Etapa 3 · Diluciones seriadas</h3>' +
+      tablaSerie('Serie de dilución seriada', [
+        { rotulo: 'DS1', partida: PARTIDA_DS.DS1, volumen: 10 },
+        { rotulo: 'DS2', partida: PARTIDA_DS.DS2, volumen: 10 },
+        { rotulo: 'DS3', partida: PARTIDA_DS.DS3, volumen: 10 },
+        { rotulo: 'DS4', partida: PARTIDA_DS.DS4, volumen: 10 }
+      ]) +
+      figura('F4', 'Serie de dilución seriada', 'descF4') +
+      item('Observaciones de la etapa 3', 'obs3') +
+      figura('F5', 'Espacio de trabajo al culminar', 'descF5') +
+      '<h3>Ordenamiento observado</h3>' + tablaOrdenamiento() +
+      item('Vasos que no fue posible distinguir entre sí', 'ordenNota') +
+      item('Preparaciones que se repiten entre las dos series', 'coincidencia');
+
+    /* --- 4. Cálculos --- */
+    html += '<h2>4. Cálculo de concentraciones</h2>' +
+      '<p>Datos de partida: masa de colorante por cucharada dulcera = 10 mg · ' +
+      'volumen total de cada vaso = ' + escaparHTML(datos.volVaso || '—') + ' mL · ' +
+      'masa de colorante en el vaso M = ' + escaparHTML(datos.masaM || '—') + ' mg · ' +
+      'densidad de la solución asumida = 1,00 g/mL.</p>' +
+      tablaConcentraciones() +
+      item('Procedimiento de cálculo', 'a4proc');
+
+    /* --- 5. Análisis --- */
+    html += '<h2>5. Análisis de resultados</h2>' +
+      item('Comparación entre las observaciones y las predicciones iniciales', 'a1') +
+      item('Solución con el color más intenso y solución con el color más claro', 'a2') +
+      item('Correspondencia entre el orden observado y el orden esperado', 'a3') +
+      item('Diferencias entre las diluciones directas y las seriadas, con ejemplos de aplicación', 'a5') +
+      item('Limitaciones del cálculo de concentraciones en esta práctica', 'a6');
+
+    /* --- 6. Mirada profesional --- */
+    html += '<h2>6. Aplicación profesional</h2>' +
+      item('Importancia de medir cuidadosamente en la preparación de una solución parenteral', 'q1') +
+      item('Materiales de medición y de preparación en un laboratorio de análisis farmacéutico', 'q2') +
+      item('Técnicas para determinar la concentración de soluciones en la industria farmacéutica', 'q3');
+
+    /* --- 7. Conclusiones --- */
+    html += '<h2>7. Conclusiones</h2>' +
+      item('Revisión de las predicciones iniciales', 'c0') +
+      item('Objetivo 1 · Preparar soluciones siguiendo un procedimiento operativo estándar', 'c1') +
+      item('Objetivo 2 · Realizar diluciones directas y seriadas', 'c2') +
+      item('Objetivo 3 · Calcular las unidades de concentración', 'c3') +
+      item('Objetivo 4 · Interpretar los resultados en clave profesional', 'c4');
+
+    /* --- 8. Bibliografía --- */
+    html += '<h2>8. Referencias</h2>' +
+      '<ol><li>Brown, T., LeMay, H., Bursten, B. y Burdge, J. (2004). <em>Química: la ciencia central</em> (9.ª ed.). Pearson Education.</li>' +
+      '<li>Petrucci, R. H., Bissonnette, C., Madura, J. D. y Herring, F. G. (2017). <em>Química general: principios y aplicaciones modernas</em>. Pearson Educación.</li></ol>' +
+      (tieneValor(datos.fuentes) ? item('Otras fuentes consultadas', 'fuentes') : '');
+
+    /* --- Pie --- */
+    html += '<footer class="doc-pie">' +
+      '<span>Bitácora generada el ' + new Date().toLocaleDateString('es-CO') + '</span>' +
+      '<span>' + escaparHTML(nombre) + '</span>' +
+      '<span>Guía y diseño del entorno: Sergio Andrés Patiño Martínez</span>' +
+      '</footer></article>';
+
+    $('#documentoBitacora').innerHTML = html;
+  }
+
+  /* ======================================================================
+     13. VISTA PREVIA, PDF E IMPRESIÓN
+     ====================================================================== */
+  function insertarBarraPrevia() {
+    var doc = $('#documentoBitacora');
+    if (!doc.classList.contains('visible')) return;
+    if ($('#btnVolverEditar')) return;
+    var barra = document.createElement('div');
+    barra.className = 'grupo-btn no-imprimir';
+    barra.style.marginBottom = '20px';
+    barra.innerHTML =
+      '<button type="button" class="btn btn-secundario" id="btnVolverEditar">← Volver a editar</button>' +
+      '<button type="button" class="btn btn-primario" id="btnPDFdesdePrevia">Generar bitácora en PDF</button>';
+    doc.insertBefore(barra, doc.firstChild);
+    $('#btnVolverEditar').addEventListener('click', cerrarVistaPrevia);
+    $('#btnPDFdesdePrevia').addEventListener('click', generarPDF);
+  }
+
+  function abrirVistaPrevia() {
+    construirBitacora();
+    var doc = $('#documentoBitacora');
+    doc.classList.add('visible');
+    insertarBarraPrevia();
+    $('#app').classList.add('oculto');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  function cerrarVistaPrevia() {
+    $('#documentoBitacora').classList.remove('visible');
+    $('#app').classList.remove('oculto');
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  function generarPDF() {
+    var faltan = pendientes();
+    if (faltan.length > 0) {
+      var seguir = confirm(
+        'Tu bitácora está casi lista: quedan ' + faltan.length + ' campos por diligenciar.\n\n' +
+        'Puedes generar el PDF de todas formas, o volver y completarlos.\n\n' +
+        'Pulsa Aceptar para generar el PDF ahora, o Cancelar para revisar.'
+      );
+      if (!seguir) {
+        cerrarVistaPrevia();
+        irAPorId('s-bitacora');
+        pintarPanelValidacion(true);
+        return;
+      }
+    }
+    construirBitacora();
+    insertarBarraPrevia();
+    var tituloPrevio = document.title;
+    var quien = tieneValor(datos.nombre) ? datos.nombre.replace(/\s+/g, '_') : 'Estudiante';
+    document.title = 'Bitacora_Soluciones_' + quien;
+    window.addEventListener('afterprint', function restaurar() {
+      document.title = tituloPrevio;
+      window.removeEventListener('afterprint', restaurar);
+    });
+    setTimeout(function () { window.print(); }, 120);
+  }
+
+  /* ======================================================================
+     14. ELIMINAR TODOS LOS DATOS
+     ====================================================================== */
+  function borrarTodo() {
+    if (!confirm('Vas a eliminar todas tus respuestas y fotografías de este dispositivo.\n\n' +
+                 'Esta acción no se puede deshacer. ¿Continuar?')) return;
+    var frase = prompt('Para confirmar, escribe la palabra ELIMINAR:');
+    if (frase === null) return;
+    if (frase.trim().toUpperCase() !== 'ELIMINAR') {
+      alert('No se eliminó nada. Tus datos siguen intactos.');
+      return;
+    }
+    try {
+      localStorage.removeItem(CLAVE_DATOS);
+      localStorage.removeItem(CLAVE_IMAGENES);
+    } catch (e) { /* almacenamiento no disponible */ }
+    datos = {}; imagenes = {};
+    location.reload();
+  }
+
+  /* ======================================================================
+     15. LOGOS OPCIONALES
+     ====================================================================== */
+  function ajustarLogos() {
+    [['#logoInstitucional', '#huecoInstitucional'],
+     ['#logoInstitucionalPie', '#huecoInstitucionalPie'],
+     ['#logoDesarrollo', '#huecoDesarrollo']].forEach(function (par) {
+      var img = $(par[0]), hueco = $(par[1]);
+      if (!img || !hueco) return;
+      if (img.hidden || !img.getAttribute('src')) return;
+
+      // El logo existe: se oculta el recuadro punteado.
+      hueco.style.display = 'none';
+
+      // Si el archivo no está junto al HTML, se recupera el recuadro
+      // para que el módulo nunca muestre una imagen rota.
+      img.addEventListener('error', function () {
+        img.hidden = true;
+        hueco.style.display = '';
+      });
+      if (img.complete && img.naturalWidth === 0) {
+        img.hidden = true;
+        hueco.style.display = '';
+      }
+    });
+  }
+
+  /* ======================================================================
+     16. ARRANQUE
+     ====================================================================== */
+  function iniciar() {
+    recuperar();
+    construirTablaOrden();
+    construirTablaCalculos();
+    vincularCampos();
+    vincularFotos();
+    iniciarLienzo();
+    iniciarNavegacion();
+    ajustarLogos();
+    pintarEcoPredicciones();
+    actualizarResumenRegistro();
+
+    $('#btnRevisar').addEventListener('click', function () { pintarPanelValidacion(true); });
+    $('#btnVistaPrevia').addEventListener('click', abrirVistaPrevia);
+    $('#btnPDF').addEventListener('click', generarPDF);
+    $('#btnBorrar').addEventListener('click', borrarTodo);
+
+    irA(0);
+    indicarGuardado(true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciar);
+  } else {
+    iniciar();
+  }
+})();
+</script>
+</body>
+</html>
